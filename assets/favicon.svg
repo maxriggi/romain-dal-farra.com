@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0a0a0a"/>
+  <g transform="translate(16,16)">
+    <!-- Aperture blades -->
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.95"/>
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.85" transform="rotate(60)"/>
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.75" transform="rotate(120)"/>
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.65" transform="rotate(180)"/>
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.55" transform="rotate(240)"/>
+    <path d="M0,-10 L5.5,-4 L-2,-4 Z" fill="#d4a04a" opacity="0.45" transform="rotate(300)"/>
+    <!-- Center hole -->
+    <circle r="3.2" fill="#0a0a0a"/>
+    <circle r="2.4" fill="none" stroke="#d4a04a" stroke-width="0.5" opacity="0.4"/>
+  </g>
+</svg>
