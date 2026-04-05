@@ -1192,6 +1192,84 @@
       color: var(--gray-light);
     }
 
+    /* Portfolio filters */
+    .portfolio__filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+    .portfolio__filter-btn {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      background: transparent;
+      border: 1px solid var(--gray-dark);
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-smooth);
+    }
+    .portfolio__filter-btn:hover {
+      color: var(--amber);
+      border-color: var(--amber-dim);
+    }
+    .portfolio__filter-btn.active {
+      color: var(--amber);
+      border-color: var(--amber);
+      background: rgba(212, 160, 74, 0.08);
+    }
+
+    /* Play button overlay */
+    .film-card__play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease-smooth);
+      z-index: 2;
+    }
+    .film-card:hover .film-card__play {
+      opacity: 1;
+    }
+    .film-card__play-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(212, 160, 74, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--duration-fast) var(--ease-smooth);
+    }
+    .film-card:hover .film-card__play-icon {
+      transform: scale(1.1);
+    }
+    .film-card__play-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--black-deep);
+      margin-left: 2px;
+    }
+
+    /* Film card as link */
+    a.film-card {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Filter animation */
+    .film-card[data-hidden] {
+      display: none;
+    }
+
     /* Scroll hint */
     .portfolio__scroll-hint {
       display: flex;
@@ -1859,6 +1937,13 @@
       <span class="section__label">Filmographie</span>
       <h2 class="section__heading">Projets selectionnes</h2>
       <div class="section__divider"></div>
+      <div class="portfolio__filters" role="tablist" aria-label="Filtrer par role">
+        <button class="portfolio__filter-btn active" data-filter="all" role="tab" aria-selected="true">Tous</button>
+        <button class="portfolio__filter-btn" data-filter="realisateur" role="tab" aria-selected="false">Realisateur</button>
+        <button class="portfolio__filter-btn" data-filter="dop" role="tab" aria-selected="false">Dir. Photo</button>
+        <button class="portfolio__filter-btn" data-filter="cadreur" role="tab" aria-selected="false">Cadreur / Gaffer</button>
+        <button class="portfolio__filter-btn" data-filter="montage" role="tab" aria-selected="false">Montage</button>
+      </div>
     </div>
 
     <div class="portfolio__strip-wrapper">
@@ -1876,51 +1961,203 @@
       <!-- Film strip with project cards -->
       <div class="portfolio__strip" id="portfolioStrip" role="list" aria-label="Projets en defilement horizontal">
 
-        <article class="film-card" role="listitem">
+        <!-- Showreel -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/356009875" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=480&q=75" alt="Ceremonie de remise de prix" loading="lazy">
+            <img class="film-card__poster-img" src="https://vumbnail.com/356009875.jpg" alt="Showreel Romain Dal Farra" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
-              <span class="film-card__year">2023</span>
-              <span class="film-card__type">Ceremonie</span>
+              <span class="film-card__year">2024</span>
+              <span class="film-card__type">Showreel</span>
             </div>
-            <h3 class="film-card__title">Letzebuerg Filmprais</h3>
-            <p class="film-card__role">Directeur de la Photographie</p>
+            <h3 class="film-card__title">Bande Demo</h3>
+            <p class="film-card__role">Realisateur / Monteur</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- ENR Courtage -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://www.youtube.com/watch?v=evhVx5nkPBs" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=480&q=75" alt="Tournage publicitaire" loading="lazy">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/evhVx5nkPBs/hqdefault.jpg" alt="ENR Courtage film corporate" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
               <span class="film-card__year">2022</span>
-              <span class="film-card__type">Publicite</span>
+              <span class="film-card__type">Corporate</span>
             </div>
-            <h3 class="film-card__title">Loisirs Habitats</h3>
-            <p class="film-card__role">Chef Operateur &mdash; Real. Raphael Kindig</p>
+            <h3 class="film-card__title">ENR Courtage</h3>
+            <p class="film-card__role">Realisateur / Cadreur &mdash; Atypic Prod</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- A Bientot de te revoir - FranceTV Slash -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=pD_q-itkU08&list=PLHAgp1CvA5tn-7KFPlJHk1m9Doyfw-te_&index=11" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=480&q=75" alt="Performance musicale live" loading="lazy">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/pD_q-itkU08/hqdefault.jpg" alt="A Bientot de te revoir FranceTV" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Serie TV</span>
+            </div>
+            <h3 class="film-card__title">A Bientot de te revoir</h3>
+            <p class="film-card__role">Gaffer / Op. Camera &mdash; FranceTV Slash</p>
+          </div>
+        </a>
+
+        <!-- Clip Isacha - La fame -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/359600019" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/359600019.jpg" alt="Clip I Sacha La fame" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
               <span class="film-card__year">2019</span>
               <span class="film-card__type">Clip Musical</span>
             </div>
-            <h3 class="film-card__title">I Sacha &mdash; Le Defi</h3>
+            <h3 class="film-card__title">I Sacha &mdash; La fame</h3>
             <p class="film-card__role">Realisateur</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- Clip Jeanne to - FORCA -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/656593635" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=480&q=75" alt="Scene de court metrage" loading="lazy">
+            <img class="film-card__poster-img" src="https://vumbnail.com/656593635.jpg" alt="Clip Jeanne to FORCA" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Clip Musical</span>
+            </div>
+            <h3 class="film-card__title">Jeanne to &mdash; FORCA</h3>
+            <p class="film-card__role">Realisateur</p>
+          </div>
+        </a>
+
+        <!-- Clip SLY - Korben -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/609940325" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/609940325.jpg" alt="Clip SLY Korben" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Clip Musical</span>
+            </div>
+            <h3 class="film-card__title">SLY &mdash; Korben</h3>
+            <p class="film-card__role">Realisateur</p>
+          </div>
+        </a>
+
+        <!-- Ice Arena -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/596781245" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/596781245.jpg" alt="Ice Arena commercial" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Publicite</span>
+            </div>
+            <h3 class="film-card__title">Ice Arena</h3>
+            <p class="film-card__role">Realisateur / Monteur</p>
+          </div>
+        </a>
+
+        <!-- Ministere de la justice -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://vimeo.com/756074703" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/756074703.jpg" alt="Spot TV Ministere de la Justice" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2022</span>
+              <span class="film-card__type">Spot TV</span>
+            </div>
+            <h3 class="film-card__title">Ministere de la Justice</h3>
+            <p class="film-card__role">Gaffer &mdash; Douglass Prod / Atypic Prod</p>
+          </div>
+        </a>
+
+        <!-- Red Rock Center Mikado Publicis -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=SFGNL1neIaU" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/SFGNL1neIaU/hqdefault.jpg" alt="Publicite Red Rock Center" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2022</span>
+              <span class="film-card__type">Publicite</span>
+            </div>
+            <h3 class="film-card__title">Red Rock Center</h3>
+            <p class="film-card__role">1er Asst. Camera / Gaffer &mdash; Mikado Publicis</p>
+          </div>
+        </a>
+
+        <!-- ROOM 42 Documentary -->
+        <a class="film-card" role="listitem" data-category="dop" href="https://www.youtube.com/watch?v=PniitdtSAXM&t=295s" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/PniitdtSAXM/hqdefault.jpg" alt="ROOM 42 Documentary" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2020</span>
+              <span class="film-card__type">Documentaire</span>
+            </div>
+            <h3 class="film-card__title">ROOM 42</h3>
+            <p class="film-card__role">Directeur de la Photographie</p>
+          </div>
+        </a>
+
+        <!-- Minett UNESCO Biosphere -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=u1yBxKfTE0g" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/u1yBxKfTE0g/hqdefault.jpg" alt="Minett UNESCO Biosphere" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2022</span>
+              <span class="film-card__type">Institutionnel</span>
+            </div>
+            <h3 class="film-card__title">Minett UNESCO Biosphere</h3>
+            <p class="film-card__role">1er Asst. Camera / Cadreur / Gaffer</p>
+          </div>
+        </a>
+
+        <!-- Take Off RTL TV -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=YugR_pEirU4" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/YugR_pEirU4/hqdefault.jpg" alt="Take Off RTL TV" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Emission TV</span>
+            </div>
+            <h3 class="film-card__title">Take Off &mdash; RTL TV</h3>
+            <p class="film-card__role">Gaffer</p>
+          </div>
+        </a>
+
+        <!-- Je suis une presence -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/254307998" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/254307998.jpg" alt="Je suis une presence Nikon Film Festival" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
@@ -1930,11 +2167,13 @@
             <h3 class="film-card__title">Je suis une presence</h3>
             <p class="film-card__role">Realisateur &mdash; Nikon Film Festival</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- Fosbury -->
+        <a class="film-card" role="listitem" data-category="dop" href="https://www.youtube.com/watch?v=juz8pUXqSyg" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=480&q=75" alt="Scene dramatique en salle" loading="lazy">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/juz8pUXqSyg/hqdefault.jpg" alt="Fosbury court metrage" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
@@ -1942,37 +2181,121 @@
               <span class="film-card__type">Court Metrage</span>
             </div>
             <h3 class="film-card__title">Fosbury</h3>
-            <p class="film-card__role">Chef Operateur &mdash; Real. F.X. Mercoeur</p>
+            <p class="film-card__role">Dir. Photo &mdash; Real. F.X. Mercoeur</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- 80m2 -->
+        <a class="film-card" role="listitem" data-category="dop" href="https://vimeo.com/245328565" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=480&q=75" alt="Eclairage cinematographique" loading="lazy">
+            <img class="film-card__poster-img" src="https://vumbnail.com/245328565.jpg" alt="80m2 court metrage" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
-              <span class="film-card__year">2017</span>
+              <span class="film-card__year">2016</span>
               <span class="film-card__type">Court Metrage</span>
             </div>
             <h3 class="film-card__title">80 m&sup2;</h3>
-            <p class="film-card__role">Chef Operateur &mdash; Real. P. Auer-Grumbach</p>
+            <p class="film-card__role">Dir. Photo &mdash; Real. P. Auer-Grumbach</p>
           </div>
-        </article>
+        </a>
 
-        <article class="film-card" role="listitem">
+        <!-- Loisirs Habitat Film 1 -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=kUl2a0BDwcQ" target="_blank" rel="noopener">
           <div class="film-card__poster">
-            <img class="film-card__poster-img" src="https://images.unsplash.com/photo-1509281373149-e957c6296406?w=480&q=75" alt="Atelier cinema avec des jeunes" loading="lazy">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/kUl2a0BDwcQ/hqdefault.jpg" alt="Loisirs Habitat Grand-Est" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
           </div>
           <div class="film-card__body">
             <div class="film-card__meta">
-              <span class="film-card__year">2015-2017</span>
-              <span class="film-card__type">Education</span>
+              <span class="film-card__year">2022</span>
+              <span class="film-card__type">Publicite</span>
             </div>
-            <h3 class="film-card__title">Ateliers Cinema</h3>
-            <p class="film-card__role">Formateur &mdash; Centre Social G. Lacour, Metz</p>
+            <h3 class="film-card__title">Loisirs Habitat Grand-Est</h3>
+            <p class="film-card__role">1er Asst. Camera / Cadreur / Monteur</p>
           </div>
-        </article>
+        </a>
+
+        <!-- SpinnUp Stage -->
+        <a class="film-card" role="listitem" data-category="realisateur" href="https://vimeo.com/292222468" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/292222468.jpg" alt="SpinnUp Stage aftermovie" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2018</span>
+              <span class="film-card__type">Aftermovie</span>
+            </div>
+            <h3 class="film-card__title">SpinnUp Stage</h3>
+            <p class="film-card__role">Realisateur / Monteur</p>
+          </div>
+        </a>
+
+        <!-- Physics Dept Univ Luxembourg -->
+        <a class="film-card" role="listitem" data-category="dop" href="https://www.youtube.com/watch?v=bO4IXO_ZzOA" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/bO4IXO_ZzOA/hqdefault.jpg" alt="Universite de Luxembourg" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2020</span>
+              <span class="film-card__type">Institutionnel</span>
+            </div>
+            <h3 class="film-card__title">Universite de Luxembourg</h3>
+            <p class="film-card__role">Dir. Photo / Cadreur &mdash; Dept. Physique</p>
+          </div>
+        </a>
+
+        <!-- Panelux / Fisher -->
+        <a class="film-card" role="listitem" data-category="cadreur" href="https://www.youtube.com/watch?v=PFyDo6H8YPw" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/PFyDo6H8YPw/hqdefault.jpg" alt="Panelux Fisher publicite" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2021</span>
+              <span class="film-card__type">Publicite</span>
+            </div>
+            <h3 class="film-card__title">Panelux / Fisher</h3>
+            <p class="film-card__role">Gaffer</p>
+          </div>
+        </a>
+
+        <!-- Capitana Logo Animation -->
+        <a class="film-card" role="listitem" data-category="montage" href="https://vimeo.com/1179689512" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://vumbnail.com/1179689512.jpg" alt="Capitana Logo animation" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2024</span>
+              <span class="film-card__type">Motion Design</span>
+            </div>
+            <h3 class="film-card__title">Capitana &mdash; Logo Animation</h3>
+            <p class="film-card__role">Montage / Motion Design</p>
+          </div>
+        </a>
+
+        <!-- Crise et chuchotements -->
+        <a class="film-card" role="listitem" data-category="montage" href="https://www.youtube.com/watch?v=my4gk8yv14c" target="_blank" rel="noopener">
+          <div class="film-card__poster">
+            <img class="film-card__poster-img" src="https://img.youtube.com/vi/my4gk8yv14c/hqdefault.jpg" alt="Bande annonce Crise et chuchotements" loading="lazy">
+            <div class="film-card__play"><div class="film-card__play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></div></div>
+          </div>
+          <div class="film-card__body">
+            <div class="film-card__meta">
+              <span class="film-card__year">2020</span>
+              <span class="film-card__type">Documentaire</span>
+            </div>
+            <h3 class="film-card__title">Crise et chuchotements</h3>
+            <p class="film-card__role">Montage &mdash; Bande annonce</p>
+          </div>
+        </a>
 
       </div>
 
@@ -2452,7 +2775,7 @@
 
         // Smooth follow loop
         function updateCursor() {
-          var lerp = 0.15;
+          var lerp = 0.35;
           cursorX += (targetX - cursorX) * lerp;
           cursorY += (targetY - cursorY) * lerp;
           cursor.style.transform = 'translate(' + (cursorX - 16) + 'px, ' + (cursorY - 16) + 'px)';
@@ -2581,11 +2904,13 @@
         if (!strip) return;
 
         var isDown = false;
+        var isDragging = false;
         var startX;
         var scrollLeft;
 
         strip.addEventListener('mousedown', function (e) {
           isDown = true;
+          isDragging = false;
           strip.style.cursor = 'grabbing';
           startX = e.pageX - strip.offsetLeft;
           scrollLeft = strip.scrollLeft;
@@ -2604,9 +2929,18 @@
         strip.addEventListener('mousemove', function (e) {
           if (!isDown) return;
           e.preventDefault();
+          isDragging = true;
           var x = e.pageX - strip.offsetLeft;
           var walk = (x - startX) * 1.5;
           strip.scrollLeft = scrollLeft - walk;
+        });
+
+        // Prevent link click when dragging
+        strip.addEventListener('click', function (e) {
+          if (isDragging) {
+            e.preventDefault();
+            isDragging = false;
+          }
         });
 
         // Touch support
@@ -2623,6 +2957,39 @@
           var walk = (x - touchStartX) * 1.2;
           strip.scrollLeft = touchScrollLeft - walk;
         }, { passive: true });
+      }
+
+      /* ============================================================
+         PORTFOLIO FILTERS
+         ============================================================ */
+      function initPortfolioFilters() {
+        var buttons = document.querySelectorAll('.portfolio__filter-btn');
+        var cards = document.querySelectorAll('#portfolioStrip .film-card');
+        var strip = document.getElementById('portfolioStrip');
+
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var filter = btn.getAttribute('data-filter');
+
+            buttons.forEach(function (b) {
+              b.classList.remove('active');
+              b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+
+            cards.forEach(function (card) {
+              if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                card.removeAttribute('data-hidden');
+              } else {
+                card.setAttribute('data-hidden', '');
+              }
+            });
+
+            // Reset scroll to start
+            if (strip) strip.scrollLeft = 0;
+          });
+        });
       }
 
       /* ============================================================
@@ -2760,6 +3127,7 @@
         initNav();
         initScrollReveals();
         initPortfolioStrip();
+        initPortfolioFilters();
         initShutterButtons();
         initContactForm();
         initSmoothScroll();
