@@ -983,6 +983,52 @@
       inset: 0;
       box-shadow: inset 0 0 60px rgba(0,0,0,0.3);
       pointer-events: none;
+      z-index: 1;
+    }
+    .showreel__cover {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .showreel__cover img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.65);
+      transition: filter 0.4s var(--ease-smooth);
+    }
+    .showreel__cover:hover img {
+      filter: brightness(0.45);
+    }
+    .showreel__play {
+      position: relative;
+      z-index: 1;
+      width: 80px;
+      height: 80px;
+      border: 2px solid rgba(255,255,255,0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      transition: transform 0.3s var(--ease-smooth), background 0.3s;
+    }
+    .showreel__cover:hover .showreel__play {
+      transform: scale(1.1);
+      background: rgba(212, 160, 74, 0.6);
+    }
+    .showreel__play svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+      margin-left: 4px;
     }
 
     /* ============================================================
@@ -1884,8 +1930,13 @@
         <div class="section__divider"></div>
       </div>
       <div class="showreel__wrapper reveal">
-        <div class="showreel__video">
-          <iframe src="https://player.vimeo.com/video/356009875?dnt=1&byline=0&portrait=0&title=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Showreel Romain Dal Farra"></iframe>
+        <div class="showreel__video" id="showreelVideo">
+          <div class="showreel__cover" id="showreelCover">
+            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80" alt="Plateau de tournage cinema">
+            <div class="showreel__play">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -3072,6 +3123,24 @@
           });
         });
       }
+
+      /* ============================================================
+         SHOWREEL PLAY
+         ============================================================ */
+      (function () {
+        var cover = document.getElementById('showreelCover');
+        if (!cover) return;
+        cover.addEventListener('click', function () {
+          var container = document.getElementById('showreelVideo');
+          cover.remove();
+          var iframe = document.createElement('iframe');
+          iframe.src = 'https://player.vimeo.com/video/356009875?autoplay=1&dnt=1&byline=0&portrait=0&title=0';
+          iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.title = 'Showreel Romain Dal Farra';
+          container.appendChild(iframe);
+        });
+      })();
 
       /* ============================================================
          CONTACT FORM (basic front-end handling)
