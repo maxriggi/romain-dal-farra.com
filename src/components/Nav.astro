@@ -1,10 +1,11 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/logos/logo1.png';
+const base = import.meta.env.BASE_URL;
 ---
 
 <nav class="nav" id="mainNav" aria-label="Navigation principale">
-  <a href="#" class="nav__logo">
+  <a href={`${base}/`} class="nav__logo">
     <Image src={logoImg} alt="Romain Dal Farra" width={120} height={40} class="nav__logo-img" />
   </a>
 
@@ -13,12 +14,12 @@ import logoImg from '../assets/logos/logo1.png';
   </button>
 
   <ul class="nav__links" id="navLinks">
-    <li><a href="#a-propos" class="nav__link">À propos</a></li>
-    <li><a href="#services" class="nav__link">Services</a></li>
-    <li><a href="#filmographie" class="nav__link">Filmographie</a></li>
-    <li><a href={`${import.meta.env.BASE_URL}/photographie`} class="nav__link">Photographie</a></li>
-    <li><a href="#competences" class="nav__link">Compétences</a></li>
-    <li><a href="#contact" class="nav__link">Contact</a></li>
+    <li><a href={`${base}/#a-propos`} class="nav__link">À propos</a></li>
+    <li><a href={`${base}/#services`} class="nav__link">Services</a></li>
+    <li><a href={`${base}/#filmographie`} class="nav__link">Filmographie</a></li>
+    <li><a href={`${base}/photographie`} class="nav__link">Photographie</a></li>
+    <li><a href={`${base}/#competences`} class="nav__link">Compétences</a></li>
+    <li><a href={`${base}/#contact`} class="nav__link">Contact</a></li>
   </ul>
 </nav>
 
@@ -28,15 +29,21 @@ import logoImg from '../assets/logos/logo1.png';
     const toggle = document.getElementById('navToggle');
     const links = document.getElementById('navLinks');
     if (!nav || !toggle || !links) return;
-    const heroHeight = window.innerHeight;
+    const hero = document.getElementById('hero');
 
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > heroHeight * 0.7) {
-        nav.classList.add('visible', 'scrolled');
-      } else {
-        nav.classList.remove('visible', 'scrolled');
-      }
-    }, { passive: true });
+    // If no hero (e.g. subpages), show nav immediately
+    if (!hero) {
+      nav.classList.add('visible', 'scrolled');
+    } else {
+      const heroHeight = hero.offsetHeight;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > heroHeight * 0.7) {
+          nav.classList.add('visible', 'scrolled');
+        } else {
+          nav.classList.remove('visible', 'scrolled');
+        }
+      }, { passive: true });
+    }
 
     toggle.addEventListener('click', () => {
       const isOpen = links.classList.toggle('open');
