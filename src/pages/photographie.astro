@@ -1,0 +1,391 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const galleries = yaml.parse(readFileSync('src/data/galleries.yaml', 'utf-8'));
+
+// Import all gallery images dynamically
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/realisations/**/*.webp',
+  { eager: true }
+);
+
+// Group images by gallery slug
+function getGalleryImages(slug: string) {
+  return Object.entries(allImages)
+    .filter(([path]) => path.includes(`/${slug}/`))
+    .map(([path, mod]) => ({ path, image: mod.default }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+}
+
+function getCoverImage(slug: string, coverFile: string) {
+  const key = `../assets/realisations/${slug}/${coverFile}`;
+  return allImages[key]?.default;
+}
+
+// Standalone images
+const standaloneImages = Object.entries(allImages)
+  .filter(([path]) => {
+    const parts = path.split('/');
+    // Direct children of realisations/ (not in subdirs)
+    return parts[parts.length - 2] === 'realisations';
+  })
+  .map(([path, mod]) => ({ path, image: mod.default }));
+---
+
+<BaseLayout>
+  <Nav />
+
+  <section class="photo-hero">
+    <div class="photo-hero__content">
+      <span class="section__label">Photographie</span>
+      <h1 class="photo-hero__title">Portfolio Photo</h1>
+      <p class="photo-hero__subtitle">Reportages, portraits, événementiel — un regard cinématographique sur chaque instant.</p>
+    </div>
+  </section>
+
+  <!-- Gallery grid -->
+  <section class="galleries section">
+    <div class="section__container">
+      <div class="galleries__grid">
+        {galleries.map((gallery: any) => {
+          const cover = getCoverImage(gallery.slug, gallery.cover);
+          return (
+            <a class="gallery-card" href={`#gallery-${gallery.slug}`}>
+              <div class="gallery-card__img-wrap">
+                {cover && <Image src={cover} alt={gallery.title} width={600} height={400} class="gallery-card__img" loading="lazy" />}
+              </div>
+              <div class="gallery-card__overlay">
+                <span class="gallery-card__category">{gallery.category}</span>
+                <h2 class="gallery-card__title">{gallery.title}</h2>
+                <p class="gallery-card__count">{getGalleryImages(gallery.slug).length} photos</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <div class="section-separator"></div>
+
+  <!-- Individual galleries -->
+  {galleries.map((gallery: any) => {
+    const images = getGalleryImages(gallery.slug);
+    return (
+      <section class="gallery section" id={`gallery-${gallery.slug}`}>
+        <div class="section__container">
+          <div class="reveal">
+            <span class="section__label">{gallery.category}</span>
+            <h2 class="section__heading">{gallery.title}</h2>
+            <div class="section__divider"></div>
+            {gallery.description && <p class="gallery__desc">{gallery.description}</p>}
+          </div>
+
+          <div class="gallery__grid">
+            {images.map(({ image, path }: any, i: number) => (
+              <div class="gallery__item" data-gallery={gallery.slug} data-index={i}>
+                <Image src={image} alt={`${gallery.title} — photo ${i + 1}`} width={600} height={400} class="gallery__img" loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  {standaloneImages.length > 0 && (
+    <section class="gallery section" id="gallery-divers">
+      <div class="section__container">
+        <div class="reveal">
+          <span class="section__label">Divers</span>
+          <h2 class="section__heading">Autres réalisations</h2>
+          <div class="section__divider"></div>
+        </div>
+        <div class="gallery__grid">
+          {standaloneImages.map(({ image, path }: any, i: number) => (
+            <div class="gallery__item">
+              <Image src={image} alt={`Photo ${i + 1}`} width={600} height={400} class="gallery__img" loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Fermer">&times;</button>
+    <button class="lightbox__prev" id="lightboxPrev" aria-label="Précédent">&#8249;</button>
+    <button class="lightbox__next" id="lightboxNext" aria-label="Suivant">&#8250;</button>
+    <div class="lightbox__content">
+      <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+    </div>
+    <div class="lightbox__counter" id="lightboxCounter"></div>
+  </div>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  (function() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const closeBtn = document.getElementById('lightboxClose');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+    if (!lightbox || !lightboxImg) return;
+
+    let currentGallery: HTMLElement[] = [];
+    let currentIndex = 0;
+
+    function open(items: HTMLElement[], index: number) {
+      currentGallery = items;
+      currentIndex = index;
+      show();
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function show() {
+      const item = currentGallery[currentIndex];
+      const img = item.querySelector('img');
+      if (!img) return;
+      // Use the original src but request a larger size
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      if (lightboxCounter) {
+        lightboxCounter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
+      }
+    }
+
+    function next() {
+      currentIndex = (currentIndex + 1) % currentGallery.length;
+      show();
+    }
+
+    function prev() {
+      currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+      show();
+    }
+
+    // Click on gallery items
+    document.querySelectorAll('.gallery__item').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.closest('.gallery__grid');
+        if (!parent) return;
+        const items = Array.from(parent.querySelectorAll('.gallery__item')) as HTMLElement[];
+        const index = items.indexOf(item as HTMLElement);
+        open(items, index);
+      });
+    });
+
+    closeBtn?.addEventListener('click', close);
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+  })();
+</script>
+
+<style>
+  /* Hero */
+  .photo-hero {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,160,74,0.05) 0%, transparent 70%),
+      var(--black-deep);
+  }
+  .photo-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .photo-hero__subtitle {
+    font-size: 1.05rem;
+    color: var(--gray-lighter);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Gallery cards grid */
+  .galleries__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+  .gallery-card {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border: 1px solid var(--gray-dark);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .gallery-card__img-wrap {
+    position: absolute;
+    inset: 0;
+  }
+  .gallery-card__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+    transition: transform 0.8s var(--ease-cinematic), filter 0.6s var(--ease-smooth);
+  }
+  .gallery-card:hover .gallery-card__img {
+    transform: scale(1.06);
+    filter: brightness(0.35);
+  }
+  .gallery-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  }
+  .gallery-card__category {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .gallery-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .gallery-card__count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--gray-lighter);
+    letter-spacing: 0.1em;
+  }
+
+  /* Photo grid */
+  .gallery__desc {
+    color: var(--gray-lighter);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.5rem;
+  }
+  .gallery__item {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .gallery__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-smooth), filter 0.3s;
+  }
+  .gallery__item:hover .gallery__img {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10002;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-smooth);
+  }
+  .lightbox.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .lightbox__content {
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox__img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  .lightbox__close {
+    position: absolute;
+    top: 1.5rem; right: 2rem;
+    background: none; border: none;
+    color: var(--white);
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .lightbox__close:hover { color: var(--amber); }
+  .lightbox__prev, .lightbox__next {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: none; border: none;
+    color: var(--white);
+    font-size: 3rem;
+    cursor: pointer;
+    padding: 1rem;
+    transition: color 0.2s;
+  }
+  .lightbox__prev:hover, .lightbox__next:hover { color: var(--amber); }
+  .lightbox__prev { left: 1rem; }
+  .lightbox__next { right: 1rem; }
+  .lightbox__counter {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%; transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray-lighter);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 768px) {
+    .galleries__grid { grid-template-columns: 1fr; }
+    .gallery__grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .lightbox__prev, .lightbox__next { font-size: 2rem; }
+  }
+</style>
