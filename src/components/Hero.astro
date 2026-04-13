@@ -111,15 +111,14 @@
     min-width: 100%; min-height: 100%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    opacity: 0.55;
-    filter: brightness(0.6) contrast(1.1);
+    opacity: 1;
+    filter: brightness(0.45);
     object-fit: cover;
   }
 
   @media (max-width: 768px) {
     .hero__bg-video-el {
-      /* On mobile, reduce quality for perf */
-      opacity: 0.4;
+      filter: brightness(0.35);
     }
   }
 
