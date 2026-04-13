@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import posterImg from '../assets/tournages/1920x1080-28.webp';
 ---
 
 <section class="hero" id="hero" aria-label="Accueil">
@@ -16,10 +14,6 @@ import posterImg from '../assets/tournages/1920x1080-28.webp';
     </video>
   </div>
 
-  <!-- Poster (visible par défaut, fade quand la vidéo joue) -->
-  <div class="hero__bg-poster" id="heroBgPoster" aria-hidden="true">
-    <Image src={posterImg} alt="" width={1920} height={1080} class="hero__bg-poster-img" loading="eager" />
-  </div>
 
   <!-- Ambient glows -->
   <div class="hero__glow hero__glow--amber" id="glowAmber" aria-hidden="true"></div>
@@ -77,28 +71,18 @@ import posterImg from '../assets/tournages/1920x1080-28.webp';
 </section>
 
 <script>
-  // Detect video playback and fade out poster
   (function() {
     const video = document.getElementById('heroVideo');
-    const poster = document.getElementById('heroBgPoster');
-    if (!video || !poster) return;
+    if (!video) return;
 
-    // On mobile / reduced motion: don't play video, keep poster
+    // On mobile / reduced motion: don't play video
     if (window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       video.pause();
-      video.removeAttribute('autoplay');
       return;
     }
 
-    // When video starts playing, fade out poster
-    video.addEventListener('playing', function() {
-      poster.classList.add('video-loaded');
-    });
-
-    // If MP4 fails to load (404), keep poster visible
-    video.addEventListener('error', function() {
-      poster.classList.remove('video-loaded');
-    });
+    // Force play if autoplay was blocked
+    video.play().catch(function() {});
   })();
 </script>
 
@@ -132,27 +116,8 @@ import posterImg from '../assets/tournages/1920x1080-28.webp';
     object-fit: cover;
   }
 
-  .hero__bg-poster {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  .hero__bg-poster-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    opacity: 0.2;
-    filter: grayscale(0.4) contrast(1.1);
-    transition: opacity 1s var(--ease-smooth);
-  }
-  /* Hide poster once video is playing */
-  .hero__bg-poster.video-loaded {
-    opacity: 0;
-    transition: opacity 1.5s var(--ease-smooth);
-  }
-
   @media (max-width: 768px), (prefers-reduced-motion: reduce) {
     .hero__bg-video { display: none !important; }
-    .hero__bg-poster { display: block; opacity: 1; }
   }
 
   .hero__glow {
