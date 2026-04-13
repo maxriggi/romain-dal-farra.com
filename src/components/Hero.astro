@@ -1,0 +1,343 @@
+---
+import { Image } from 'astro:assets';
+import posterImg from '../assets/tournages/1920x1080-28.webp';
+---
+
+<section class="hero" id="hero" aria-label="Accueil">
+  <!-- Video background (MP4 local si dispo, sinon Vimeo iframe) -->
+  <div class="hero__bg-video" id="heroBgVideo" aria-hidden="true">
+    <video
+      class="hero__bg-video-el"
+      autoplay muted loop playsinline
+      preload="auto"
+      id="heroVideo"
+    >
+      <!-- Déposer le fichier showreel dans public/videos/showreel.mp4 pour activer -->
+      <source src="/videos/showreel.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Poster (visible par défaut, fade quand la vidéo joue) -->
+  <div class="hero__bg-poster" id="heroBgPoster" aria-hidden="true">
+    <Image src={posterImg} alt="" width={1920} height={1080} class="hero__bg-poster-img" loading="eager" />
+  </div>
+
+  <!-- Ambient glows -->
+  <div class="hero__glow hero__glow--amber" id="glowAmber" aria-hidden="true"></div>
+  <div class="hero__glow hero__glow--blue" id="glowBlue" aria-hidden="true"></div>
+
+  <!-- Film strip sides -->
+  <div class="hero__filmstrip hero__filmstrip--left" aria-hidden="true"></div>
+  <div class="hero__filmstrip hero__filmstrip--right" aria-hidden="true"></div>
+
+  <!-- Light leak -->
+  <div class="hero__lightleak" aria-hidden="true"></div>
+
+  <!-- Viewfinder frame -->
+  <div class="hero__viewfinder" id="heroViewfinder" aria-hidden="true">
+    <div class="hero__corner hero__corner--tl"></div>
+    <div class="hero__corner hero__corner--tr"></div>
+    <div class="hero__corner hero__corner--bl"></div>
+    <div class="hero__corner hero__corner--br"></div>
+    <span class="hero__vf-data hero__vf-data--tl">REC 00:00:00</span>
+    <span class="hero__vf-data hero__vf-data--tr">4K UHD<br>LOG</span>
+    <span class="hero__vf-data hero__vf-data--bl">S35mm</span>
+    <span class="hero__vf-data hero__vf-data--br">24fps</span>
+  </div>
+
+  <!-- Content -->
+  <div class="hero__content">
+    <p class="hero__subtitle-top" id="heroSubtitleTop">Réalisateur et directeur de la photographie</p>
+
+    <h1 class="hero__title">
+      <span class="hero__title-line" data-text="Romain">Romain</span>
+      <span class="hero__title-line" data-text="Dal Farra">Dal Farra</span>
+    </h1>
+
+    <div class="hero__separator" id="heroSeparator"></div>
+
+    <p class="hero__subtitle" id="heroSubtitle">Création audiovisuelle — Post production — Technicien plateau</p>
+
+    <div class="hero__ctas">
+      <a href="#filmographie" class="btn-shutter">
+        Mes projets
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn-shutter btn-shutter--ghost">
+        Me contacter
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero__scroll" id="heroScroll">
+    <span class="hero__scroll-text">Scroll</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<script>
+  // Detect video playback and fade out poster
+  (function() {
+    const video = document.getElementById('heroVideo');
+    const poster = document.getElementById('heroBgPoster');
+    if (!video || !poster) return;
+
+    // On mobile / reduced motion: don't play video, keep poster
+    if (window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      video.pause();
+      video.removeAttribute('autoplay');
+      return;
+    }
+
+    // When video starts playing, fade out poster
+    video.addEventListener('playing', function() {
+      poster.classList.add('video-loaded');
+    });
+
+    // If MP4 fails to load (404), keep poster visible
+    video.addEventListener('error', function() {
+      poster.classList.remove('video-loaded');
+    });
+  })();
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  .hero__bg-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .hero__bg-video-el {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: auto; height: auto;
+    min-width: 100%; min-height: 100%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0.3;
+    filter: grayscale(0.2) contrast(1.1);
+    object-fit: cover;
+  }
+
+  .hero__bg-poster {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero__bg-poster-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+    filter: grayscale(0.4) contrast(1.1);
+    transition: opacity 1s var(--ease-smooth);
+  }
+  /* Hide poster once video is playing */
+  .hero__bg-poster.video-loaded {
+    opacity: 0;
+    transition: opacity 1.5s var(--ease-smooth);
+  }
+
+  @media (max-width: 768px), (prefers-reduced-motion: reduce) {
+    .hero__bg-video { display: none !important; }
+    .hero__bg-poster { display: block; opacity: 1; }
+  }
+
+  .hero__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 2s var(--ease-smooth);
+  }
+  .hero__glow.loaded { opacity: 1; }
+  .hero__glow--amber {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(212,160,74,0.12) 0%, transparent 70%);
+    top: 20%; right: -10%;
+  }
+  .hero__glow--blue {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(74,109,140,0.08) 0%, transparent 70%);
+    bottom: 10%; left: -10%;
+  }
+
+  .hero__viewfinder {
+    position: absolute;
+    inset: clamp(1rem, 4vw, 3rem);
+    border: 1px solid rgba(212, 160, 74, 0.08);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.5s var(--ease-smooth) 2s;
+  }
+  .hero__viewfinder.visible { opacity: 1; }
+  .hero__viewfinder::before, .hero__viewfinder::after {
+    content: '';
+    position: absolute;
+    background: rgba(212, 160, 74, 0.15);
+  }
+  .hero__viewfinder::before {
+    top: 50%; left: 0; width: 100%; height: 1px; transform: scaleX(0.02);
+  }
+  .hero__viewfinder::after {
+    top: 0; left: 50%; width: 1px; height: 100%; transform: scaleY(0.02);
+  }
+  .hero__corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: rgba(212, 160, 74, 0.2);
+    border-style: solid; border-width: 0;
+  }
+  .hero__corner--tl { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+  .hero__corner--tr { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+  .hero__corner--bl { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+  .hero__corner--br { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+  .hero__vf-data {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(212, 160, 74, 0.2);
+    text-transform: uppercase;
+  }
+  .hero__vf-data--tl { top: 8px; left: 12px; }
+  .hero__vf-data--tr { top: 8px; right: 12px; text-align: right; }
+  .hero__vf-data--bl { bottom: 8px; left: 12px; }
+  .hero__vf-data--br { bottom: 8px; right: 12px; text-align: right; }
+
+  .hero__content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero__subtitle-top {
+    font-family: var(--font-mono);
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+    opacity: 0; transform: translateY(20px);
+  }
+  .hero__subtitle-top.revealed {
+    opacity: 1; transform: translateY(0);
+    transition: opacity 1s var(--ease-cinematic) 2.2s, transform 1s var(--ease-cinematic) 2.2s;
+  }
+  .hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .hero__separator {
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    margin: 1.5rem auto;
+    transition: width 1.2s var(--ease-cinematic) 3s;
+  }
+  .hero__separator.revealed { width: min(300px, 60vw); }
+  .hero__subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    color: var(--gray-lighter);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    opacity: 0; transform: translateY(20px);
+  }
+  .hero__subtitle.revealed {
+    opacity: 1; transform: translateY(0);
+    transition: opacity 1s var(--ease-cinematic) 3.3s, transform 1s var(--ease-cinematic) 3.3s;
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeInCtas 1s var(--ease-cinematic) 4s forwards;
+  }
+  @keyframes fadeInCtas {
+    to { opacity: 1; }
+  }
+  .btn-shutter--ghost {
+    border-color: var(--gray-dark);
+    color: var(--gray-lighter);
+  }
+  .btn-shutter--ghost:hover {
+    border-color: var(--amber);
+    background: var(--amber);
+    color: var(--black);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: clamp(1.5rem, 4vh, 3rem);
+    left: 50%; transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+  }
+  .hero__scroll.revealed {
+    opacity: 1;
+    transition: opacity 1s var(--ease-smooth) 4.2s;
+    animation: scrollPulse 3s var(--ease-smooth) infinite 5s;
+  }
+  .hero__scroll-text {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    writing-mode: vertical-rl;
+  }
+  .hero__scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--amber-dim), transparent);
+    animation: scrollLine 2s var(--ease-smooth) infinite 5s;
+  }
+
+  .hero__filmstrip {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 28px;
+    opacity: 0.04;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, transparent, transparent 8px, var(--white) 8px, var(--white) 10px, transparent 10px, transparent 30px);
+  }
+  .hero__filmstrip--left { left: 0; }
+  .hero__filmstrip--right { right: 0; }
+  .hero__filmstrip::before {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--white);
+  }
+  .hero__filmstrip--left::before { right: 0; }
+  .hero__filmstrip--right::before { left: 0; }
+
+  .hero__lightleak {
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 60%; height: 80%;
+    background: radial-gradient(ellipse at center, rgba(212,160,74,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    animation: lightleakDrift 12s ease-in-out infinite alternate;
+  }
+</style>

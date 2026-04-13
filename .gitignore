@@ -7,11 +7,23 @@ build/
 .output/
 .next/
 .nuxt/
+.astro/
 
 # Env
 .env
 .env.*
 !.env.example
+
+# Raw assets (originals, not optimized for web)
+assets/DOP/
+assets/Logo/
+assets/Logos partenaires/
+assets/Moi/
+assets/Tournages/
+assets/Réalisation/
+assets/*.mp4
+assets/*.pdf
+assets/*.jpg
 
 # OS
 .DS_Store

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import FeaturedProjects from '../components/FeaturedProjects.astro';
+import Services from '../components/Services.astro';
+import Filmography from '../components/Filmography.astro';
+import Skills from '../components/Skills.astro';
+import Partners from '../components/Partners.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout>
+  <Nav />
+  <Hero />
+  <div class="section-separator"></div>
+  <About />
+  <div class="section-separator"></div>
+  <FeaturedProjects />
+  <div class="section-separator"></div>
+  <Services />
+  <div class="section-separator"></div>
+  <Filmography />
+  <div class="section-separator"></div>
+  <Skills />
+  <div class="section-separator"></div>
+  <Partners />
+  <div class="section-separator"></div>
+  <Contact />
+  <Footer />
+</BaseLayout>

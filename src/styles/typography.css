@@ -1,0 +1,365 @@
+/* ============================================================
+   TYPOGRAPHY
+   Font stacks, section labels, headings, and all
+   font-related rules.
+   ============================================================ */
+
+/* ============================================================
+   FONT FACES
+   (Self-hosted subset via base64 fallback approach)
+   Using system font stacks with web-safe fallbacks.
+   ============================================================ */
+
+/* ============================================================
+   NAVIGATION TYPOGRAPHY
+   ============================================================ */
+.nav__logo {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--white);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.nav__logo span {
+  color: var(--amber);
+}
+
+.nav__link {
+  position: relative;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gray-lighter);
+  transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+@media (max-width: 768px) {
+  .nav__link {
+    font-size: 1.2rem;
+  }
+}
+
+/* ============================================================
+   HERO TYPOGRAPHY
+   ============================================================ */
+.hero__subtitle-top {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.hero__subtitle-top.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s var(--ease-cinematic) 2.2s,
+              transform 1s var(--ease-cinematic) 2.2s;
+}
+
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.hero__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  color: var(--gray-lighter);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.hero__subtitle.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s var(--ease-cinematic) 3.3s,
+              transform 1s var(--ease-cinematic) 3.3s;
+}
+
+.hero__brand {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1vw, 0.7rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-top: 2rem;
+  opacity: 0;
+}
+.hero__brand.revealed {
+  opacity: 1;
+  transition: opacity 1.2s var(--ease-smooth) 3.8s;
+}
+
+.hero__scroll-text {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  writing-mode: vertical-rl;
+}
+
+/* Viewfinder data overlays */
+.hero__vf-data {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(212, 160, 74, 0.2);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   SECTION SHARED TYPOGRAPHY
+   ============================================================ */
+.section__label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+  margin-bottom: 0.75rem;
+}
+.section__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+/* ============================================================
+   ABOUT TYPOGRAPHY
+   ============================================================ */
+.about__portrait-text {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.about__text p {
+  margin-bottom: 1.25rem;
+  color: var(--gray-lighter);
+  font-size: 0.95rem;
+}
+.about__text p:first-of-type::first-line {
+  color: var(--white);
+}
+.about__highlight {
+  color: var(--amber) !important;
+  font-weight: 500;
+}
+.about__quote {
+  border-left: 2px solid var(--amber-dim);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: var(--gray-light);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   SERVICES TYPOGRAPHY
+   ============================================================ */
+.service-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+.service-card__desc {
+  font-size: 0.85rem;
+  color: var(--gray-light);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   PORTFOLIO TYPOGRAPHY
+   ============================================================ */
+.film-card__year {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--amber);
+}
+.film-card__type {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  padding: 2px 8px;
+  border: 1px solid var(--gray-dark);
+}
+.film-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--white);
+  margin-bottom: 0.35rem;
+}
+.film-card__role {
+  font-size: 0.8rem;
+  color: var(--gray-light);
+}
+
+.portfolio__filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  background: transparent;
+  border: 1px solid var(--gray-dark);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+.portfolio__filter-btn:hover {
+  color: var(--amber);
+  border-color: var(--amber-dim);
+}
+.portfolio__filter-btn.active {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: rgba(212, 160, 74, 0.08);
+}
+
+.portfolio__scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  color: var(--gray);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   SKILLS TYPOGRAPHY
+   ============================================================ */
+.skills__column-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--gray-dark);
+}
+
+.skill-item__name {
+  font-size: 0.85rem;
+  color: var(--gray-lighter);
+}
+.skill-item__level {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--gray);
+}
+
+.tool-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--black-card);
+  border: 1px solid var(--gray-dark);
+  font-size: 0.8rem;
+  color: var(--gray-lighter);
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth),
+              transform var(--duration-fast) var(--ease-smooth);
+}
+.tool-pill:hover {
+  border-color: var(--amber-dim);
+  color: var(--amber-light);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   CONTACT TYPOGRAPHY
+   ============================================================ */
+.contact__text {
+  color: var(--gray-lighter);
+  font-size: 0.95rem;
+  max-width: 400px;
+}
+.contact__detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--gray-lighter);
+  font-size: 0.85rem;
+}
+
+.form-group__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+.form-group__input,
+.form-group__textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--black-card);
+  border: 1px solid var(--gray-dark);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+              box-shadow var(--duration-fast) var(--ease-smooth);
+}
+.form-group__input::placeholder,
+.form-group__textarea::placeholder {
+  color: var(--gray);
+}
+
+/* Button typography */
+.btn-shutter {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.btn-shutter:hover {
+  color: var(--black);
+}
+
+/* ============================================================
+   FOOTER TYPOGRAPHY
+   ============================================================ */
+.footer__copy {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+}
+.footer__brand {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+.footer__brand span {
+  color: var(--amber-dim);
+}

@@ -1,0 +1,380 @@
+---
+import '../styles/global.css';
+import '../styles/typography.css';
+import '../styles/animations.css';
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Romain Dal Farra — Réalisateur et directeur de la photographie freelance basé à Metz. Création audiovisuelle, post-production, technicien plateau. Films institutionnels, clips musicaux, courts métrages.">
+  <meta name="keywords" content="réalisateur Metz, directeur photographie Lorraine, chef opérateur freelance, cadreur, création audiovisuelle, post-production, technicien plateau, Romain Dal Farra">
+  <meta name="author" content="Romain Dal Farra">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz">
+  <meta property="og:description" content="Réalisateur et directeur de la photographie freelance. Création audiovisuelle, post-production, technicien plateau.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://romain-dal-farra.com">
+  <meta property="og:locale" content="fr_FR">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Romain Dal Farra",
+    "jobTitle": "Réalisateur / Directeur de la Photographie",
+    "url": "https://romain-dal-farra.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Metz",
+      "addressRegion": "Grand Est",
+      "addressCountry": "FR"
+    },
+    "knowsAbout": ["Réalisation", "Direction de la Photographie", "Post-Production", "Création audiovisuelle", "Technicien plateau"],
+    "sameAs": [
+      "https://www.instagram.com/romain_dalfarra/",
+      "https://fr.linkedin.com/in/romain-dal-farra-b76231109"
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz, France</title>
+</head>
+<body>
+
+  <!-- Aperture overlay -->
+  <div class="aperture-overlay" id="apertureOverlay">
+    <svg viewBox="0 0 200 200" width="100%" height="100%">
+      <defs>
+        <mask id="apertureMask">
+          <rect width="200" height="200" fill="white"/>
+          <circle id="apertureHole" cx="100" cy="100" r="0" fill="black"/>
+        </mask>
+      </defs>
+      <rect width="200" height="200" fill="#0a0a0a" mask="url(#apertureMask)"/>
+    </svg>
+  </div>
+
+  <!-- Film grain -->
+  <div class="film-grain" id="filmGrain" aria-hidden="true">
+    <canvas id="grainCanvas"></canvas>
+  </div>
+
+  <!-- Vignette -->
+  <div class="vignette" id="vignette" aria-hidden="true"></div>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <!-- Custom cursor -->
+  <div class="custom-cursor" id="customCursor" aria-hidden="true">
+    <div class="custom-cursor__dot"></div>
+  </div>
+
+  <slot />
+
+  <script>
+    (function () {
+      'use strict';
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ---- APERTURE ----
+      const apertureOverlay = document.getElementById('apertureOverlay');
+      const apertureHole = document.getElementById('apertureHole');
+
+      function openAperture() {
+        if (prefersReducedMotion) {
+          apertureOverlay.style.display = 'none';
+          revealHeroContent();
+          return;
+        }
+        let start = null;
+        const duration = 1800;
+        const maxRadius = 350;
+
+        function animate(ts) {
+          if (!start) start = ts;
+          const elapsed = ts - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          apertureHole.setAttribute('r', eased * maxRadius);
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            apertureOverlay.style.opacity = '0';
+            apertureOverlay.style.pointerEvents = 'none';
+            setTimeout(() => { apertureOverlay.style.display = 'none'; }, 800);
+          }
+        }
+
+        setTimeout(() => {
+          requestAnimationFrame(animate);
+          setTimeout(revealHeroContent, 600);
+        }, 400);
+      }
+
+      // ---- HERO CONTENT REVEAL ----
+      function revealHeroContent() {
+        const glowAmber = document.getElementById('glowAmber');
+        const glowBlue = document.getElementById('glowBlue');
+        if (glowAmber) glowAmber.classList.add('loaded');
+        if (glowBlue) glowBlue.classList.add('loaded');
+
+        const vf = document.getElementById('heroViewfinder');
+        if (vf) vf.classList.add('visible');
+
+        const titleLines = document.querySelectorAll('.hero__title-line');
+        let charIndex = 0;
+
+        titleLines.forEach(line => {
+          const text = line.getAttribute('data-text');
+          line.textContent = '';
+          for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            if (ch === ' ') {
+              const space = document.createElement('span');
+              space.className = 'hero__title-space';
+              space.innerHTML = '&nbsp;';
+              line.appendChild(space);
+              charIndex++;
+            } else {
+              const span = document.createElement('span');
+              span.className = 'hero__title-char';
+              span.textContent = ch;
+              span.style.transitionDelay = (1.4 + charIndex * 0.06) + 's';
+              line.appendChild(span);
+              charIndex++;
+            }
+          }
+        });
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document.querySelectorAll('.hero__title-char').forEach(c => c.classList.add('revealed'));
+            document.getElementById('heroSubtitleTop')?.classList.add('revealed');
+            document.getElementById('heroSeparator')?.classList.add('revealed');
+            document.getElementById('heroSubtitle')?.classList.add('revealed');
+            document.getElementById('heroScroll')?.classList.add('revealed');
+          });
+        });
+      }
+
+      // ---- FILM GRAIN ----
+      function initFilmGrain() {
+        if (prefersReducedMotion) return;
+        const canvas = document.getElementById('grainCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const tileSize = 128;
+        const tileCanvas = document.createElement('canvas');
+        tileCanvas.width = tileSize; tileCanvas.height = tileSize;
+        const tileCtx = tileCanvas.getContext('2d');
+
+        function generateNoiseTile() {
+          const imageData = tileCtx.createImageData(tileSize, tileSize);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const val = Math.random() * 255;
+            data[i] = val; data[i+1] = val; data[i+2] = val; data[i+3] = 255;
+          }
+          tileCtx.putImageData(imageData, 0, 0);
+        }
+
+        let frameCount = 0;
+        function renderGrain() {
+          frameCount++;
+          if (frameCount % 3 === 0) {
+            generateNoiseTile();
+            ctx.clearRect(0, 0, w, h);
+            const pattern = ctx.createPattern(tileCanvas, 'repeat');
+            ctx.fillStyle = pattern;
+            ctx.save();
+            ctx.translate(Math.random() * tileSize, Math.random() * tileSize);
+            ctx.fillRect(-tileSize, -tileSize, w + tileSize * 2, h + tileSize * 2);
+            ctx.restore();
+          }
+          requestAnimationFrame(renderGrain);
+        }
+        generateNoiseTile();
+        renderGrain();
+      }
+
+      // ---- PARTICLES ----
+      function initParticles() {
+        if (prefersReducedMotion) return;
+        const container = document.getElementById('particles');
+        if (!container) return;
+        for (let i = 0; i < 25; i++) {
+          const p = document.createElement('div');
+          p.className = 'particle';
+          const size = Math.random() * 2 + 1;
+          p.style.width = size + 'px'; p.style.height = size + 'px';
+          p.style.left = Math.random() * 100 + '%';
+          p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+          p.style.animationDelay = (Math.random() * 20) + 's';
+          p.style.opacity = String(Math.random() * 0.4 + 0.1);
+          container.appendChild(p);
+        }
+      }
+
+      // ---- CUSTOM CURSOR ----
+      function initCustomCursor() {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
+        const cursor = document.getElementById('customCursor');
+        if (!cursor) return;
+        let cursorX = 0, cursorY = 0, targetX = 0, targetY = 0, isVisible = false;
+        document.body.classList.add('cursor-ready');
+
+        document.addEventListener('mousemove', e => {
+          targetX = e.clientX; targetY = e.clientY;
+          if (!isVisible) { isVisible = true; cursor.classList.add('visible'); cursorX = targetX; cursorY = targetY; }
+          const vx = (e.clientX / window.innerWidth) * 100;
+          const vy = (e.clientY / window.innerHeight) * 100;
+          const vig = document.getElementById('vignette');
+          if (vig) { vig.style.setProperty('--vignette-x', vx + '%'); vig.style.setProperty('--vignette-y', vy + '%'); }
+        });
+
+        document.addEventListener('mouseleave', () => { cursor.classList.remove('visible'); isVisible = false; });
+        document.addEventListener('mouseenter', () => { if (targetX || targetY) { cursor.classList.add('visible'); isVisible = true; } });
+
+        const hoverTargets = 'a, button, [role="button"], input, textarea, .film-card, .service-card, .tool-pill, .contact__social';
+        document.addEventListener('mouseover', e => { if (e.target.closest(hoverTargets)) cursor.classList.add('hovering'); });
+        document.addEventListener('mouseout', e => { if (e.target.closest(hoverTargets)) cursor.classList.remove('hovering'); });
+
+        function updateCursor() {
+          cursorX += (targetX - cursorX) * 0.35;
+          cursorY += (targetY - cursorY) * 0.35;
+          cursor.style.transform = 'translate(' + (cursorX - 16) + 'px, ' + (cursorY - 16) + 'px)';
+          requestAnimationFrame(updateCursor);
+        }
+        updateCursor();
+      }
+
+      // ---- SCROLL REVEALS ----
+      function initScrollReveals() {
+        if (prefersReducedMotion) return;
+        const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .wipe-reveal');
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); observer.unobserve(entry.target); } });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        revealEls.forEach(el => observer.observe(el));
+
+        const staggerContainers = document.querySelectorAll('.stagger-children');
+        const staggerObs = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              Array.from(entry.target.children).forEach((ch, i) => { ch.style.transitionDelay = (i * 0.1) + 's'; });
+              staggerObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        staggerContainers.forEach(el => staggerObs.observe(el));
+
+        const skillFills = document.querySelectorAll('.skill-item__fill');
+        const skillObs = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const w = entry.target.getAttribute('data-width');
+              entry.target.style.transform = 'scaleX(' + (w / 100) + ')';
+              entry.target.classList.add('in-view');
+              skillObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+        skillFills.forEach(el => skillObs.observe(el));
+      }
+
+      // ---- SHUTTER BUTTONS ----
+      function initShutterButtons() {
+        document.querySelectorAll('.btn-shutter').forEach(btn => {
+          btn.addEventListener('click', e => {
+            btn.querySelectorAll('.btn-shutter__ripple').forEach(r => r.remove());
+            const ripple = document.createElement('span');
+            ripple.className = 'btn-shutter__ripple';
+            const rect = btn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = size + 'px'; ripple.style.height = size + 'px';
+            ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+            ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+          });
+        });
+      }
+
+      // ---- SMOOTH SCROLL ----
+      function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', e => {
+            const targetId = anchor.getAttribute('href');
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
+            if (target) {
+              e.preventDefault();
+              const targetPos = target.getBoundingClientRect().top + window.scrollY - 80;
+              window.scrollTo({ top: targetPos, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            }
+          });
+        });
+      }
+
+      // ---- TIMECODE ----
+      function initTimecode() {
+        const el = document.querySelector('.hero__vf-data--tl');
+        if (!el) return;
+        setInterval(() => {
+          const now = new Date();
+          el.textContent = 'REC ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+        }, 1000);
+      }
+
+      // ---- PARALLAX ----
+      function initParallax() {
+        if (prefersReducedMotion) return;
+        const glowAmber = document.getElementById('glowAmber');
+        const glowBlue = document.getElementById('glowBlue');
+        if (!glowAmber || !glowBlue) return;
+        window.addEventListener('scroll', () => {
+          const scrollY = window.scrollY;
+          if (scrollY < window.innerHeight * 1.2) {
+            const rate = scrollY * 0.3;
+            glowAmber.style.transform = 'translateY(' + rate + 'px)';
+            glowBlue.style.transform = 'translateY(' + (rate * 0.6) + 'px)';
+          }
+        }, { passive: true });
+      }
+
+      // ---- INIT ----
+      function init() {
+        openAperture();
+        initFilmGrain();
+        initParticles();
+        initCustomCursor();
+        initScrollReveals();
+        initShutterButtons();
+        initSmoothScroll();
+        initTimecode();
+        initParallax();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+</body>
+</html>

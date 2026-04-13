@@ -1,0 +1,204 @@
+/* ============================================================
+   ANIMATIONS
+   All @keyframes, scroll-reveal classes, reduced-motion,
+   and print styles.
+   ============================================================ */
+
+/* ============================================================
+   PARTICLE FLOAT
+   ============================================================ */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(90vh) translateX(10px) scale(1);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(-20px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   HERO SCROLL INDICATOR
+   ============================================================ */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ============================================================
+   HERO LIGHT LEAK DRIFT
+   ============================================================ */
+@keyframes lightleakDrift {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.5; }
+  100% { transform: translate(-5%, 8%) rotate(3deg); opacity: 1; }
+}
+
+/* ============================================================
+   PORTFOLIO SCROLL HINT BOUNCE
+   ============================================================ */
+@keyframes scrollHintBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+/* ============================================================
+   SHUTTER RIPPLE (button effect)
+   ============================================================ */
+@keyframes shutterRipple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   SCROLL REVEAL CLASSES
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--duration-slow) var(--ease-cinematic),
+              transform var(--duration-slow) var(--ease-cinematic);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity var(--duration-slow) var(--ease-cinematic),
+              transform var(--duration-slow) var(--ease-cinematic);
+}
+.reveal-left.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity var(--duration-slow) var(--ease-cinematic),
+              transform var(--duration-slow) var(--ease-cinematic);
+}
+.reveal-right.in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity var(--duration-slow) var(--ease-cinematic),
+              transform var(--duration-slow) var(--ease-cinematic);
+}
+.reveal-scale.in-view {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Wipe reveal (horizontal curtain) */
+.wipe-reveal {
+  position: relative;
+  overflow: hidden;
+}
+.wipe-reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black-deep);
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 1.2s var(--ease-cinematic);
+}
+.wipe-reveal.in-view::after {
+  transform: scaleX(0);
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--duration-med) var(--ease-cinematic),
+              transform var(--duration-med) var(--ease-cinematic);
+}
+.stagger-children.in-view > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   PREFERS REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+  .stagger-children > * {
+    opacity: 1;
+    transform: none;
+  }
+  .wipe-reveal::after {
+    transform: scaleX(0);
+  }
+  .hero__title-char {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .hero__subtitle-top,
+  .hero__separator,
+  .hero__subtitle,
+  .hero__brand,
+  .hero__scroll {
+    opacity: 1;
+    transform: none;
+  }
+  .hero__separator {
+    width: min(300px, 60vw);
+  }
+  .aperture-overlay {
+    display: none;
+  }
+  .film-grain,
+  .particles {
+    display: none;
+  }
+  .skill-item__fill {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+  .film-grain, .vignette, .particles, .custom-cursor, .aperture-overlay,
+  .hero__filmstrip, .hero__lightleak, .hero__viewfinder { display: none; }
+  body { background: #fff; color: #000; }
+  .nav { position: static; background: transparent; }
+  .section { padding: 2rem 0; }
+}

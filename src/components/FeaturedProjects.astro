@@ -1,0 +1,136 @@
+---
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const allProjects = yaml.parse(readFileSync('src/data/projects.yaml', 'utf-8'));
+const featured = allProjects.filter((p: any) => p.featured);
+
+function getThumbnailUrl(project: any) {
+  if (project.thumbnail_source === 'vimeo') return `https://vumbnail.com/${project.thumbnail_id}.jpg`;
+  if (project.thumbnail_source === 'youtube') return `https://img.youtube.com/vi/${project.thumbnail_id}/hqdefault.jpg`;
+  return '';
+}
+---
+
+<section class="featured section" id="projets" aria-label="Projets en vedette">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">En vedette</span>
+      <h2 class="section__heading">Projets sélectionnés</h2>
+      <div class="section__divider"></div>
+    </div>
+
+    <div class="featured__grid">
+      {featured.map((project: any) => (
+        <a
+          class="featured__card reveal-scale"
+          href={project.video_url || '#'}
+          target={project.video_url ? '_blank' : undefined}
+          rel={project.video_url ? 'noopener' : undefined}
+        >
+          <div class="featured__card-bg">
+            {getThumbnailUrl(project) && (
+              <img src={getThumbnailUrl(project)} alt={project.title} loading="lazy" />
+            )}
+          </div>
+          <div class="featured__card-overlay">
+            <span class="featured__card-type">{project.type}</span>
+            <h3 class="featured__card-title">{project.title}</h3>
+            <p class="featured__card-role">{project.role}</p>
+            {project.video_url && (
+              <div class="featured__card-play">
+                <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 60%, rgba(212, 160, 74, 0.04) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
+  }
+  .featured__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .featured__card {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--gray-dark);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .featured__card-bg {
+    position: absolute;
+    inset: 0;
+  }
+  .featured__card-bg img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.5) brightness(0.5);
+    transition: transform 0.8s var(--ease-cinematic), filter 0.6s var(--ease-smooth);
+  }
+  .featured__card:hover .featured__card-bg img {
+    transform: scale(1.08);
+    filter: grayscale(0) brightness(0.4);
+  }
+  .featured__card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    z-index: 1;
+  }
+  .featured__card-type {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .featured__card-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--white);
+    margin-bottom: 0.35rem;
+  }
+  .featured__card-role {
+    font-size: 0.85rem;
+    color: var(--gray-lighter);
+  }
+  .featured__card-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(212, 160, 74, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s var(--ease-cinematic);
+  }
+  .featured__card:hover .featured__card-play {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .featured__card-play svg {
+    width: 24px; height: 24px;
+    fill: var(--black-deep);
+    margin-left: 3px;
+  }
+</style>

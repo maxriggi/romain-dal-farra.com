@@ -1,0 +1,184 @@
+---
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const services = yaml.parse(readFileSync('src/data/services.yaml', 'utf-8'));
+
+const iconPaths: Record<string, string> = {
+  clapperboard: '<path d="M4 2l4 4H4zM8 2l4 4H8zM12 2l4 4h-4zM16 2l4 4h-4z"/><rect x="2" y="6" width="20" height="14" rx="2"/>',
+  aperture: '<circle cx="12" cy="12" r="10"/><line x1="14.31" y1="8" x2="20.05" y2="17.94"/><line x1="9.69" y1="8" x2="21.17" y2="8"/><line x1="7.38" y1="12" x2="13.12" y2="2.06"/><line x1="9.69" y1="16" x2="3.95" y2="6.06"/><line x1="14.31" y1="16" x2="2.83" y2="16"/><line x1="16.62" y1="12" x2="10.88" y2="21.94"/>',
+  'film-edit': '<path d="M4 4h16v12H4z"/><path d="M4 8h16"/><path d="M8 4v12"/><path d="M1 20h22"/><circle cx="6" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>',
+  camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  drone: '<circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/><path d="M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>',
+};
+---
+
+<section class="services section" id="services" aria-label="Services">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">Services</span>
+      <h2 class="section__heading">Ce que je propose</h2>
+      <div class="section__divider"></div>
+    </div>
+
+    <div class="services__carousel-wrapper">
+      <div class="services__carousel" id="servicesCarousel">
+        {/* Original + duplicate for seamless loop */}
+        {[...services, ...services].map((service: any, i: number) => (
+          <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`}>
+            <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
+            <h3 class="service-card__title">{service.title}</h3>
+            <p class="service-card__desc">{service.description}</p>
+            {service.coming_soon && <span class="service-card__badge">Bientôt</span>}
+          </article>
+        ))}
+      </div>
+
+      <button class="services__pause" id="servicesPause" aria-label="Mettre en pause le défilement">
+        <svg viewBox="0 0 24 24" class="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg viewBox="0 0 24 24" class="play-icon" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const carousel = document.getElementById('servicesCarousel');
+    const pauseBtn = document.getElementById('servicesPause');
+    if (!carousel || !pauseBtn) return;
+
+    let isPaused = false;
+
+    carousel.addEventListener('mouseenter', () => { if (!isPaused) carousel.style.animationPlayState = 'paused'; });
+    carousel.addEventListener('mouseleave', () => { if (!isPaused) carousel.style.animationPlayState = 'running'; });
+
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      carousel.style.animationPlayState = isPaused ? 'paused' : 'running';
+      pauseBtn.querySelector('.pause-icon').style.display = isPaused ? 'none' : 'block';
+      pauseBtn.querySelector('.play-icon').style.display = isPaused ? 'block' : 'none';
+      pauseBtn.setAttribute('aria-label', isPaused ? 'Reprendre le défilement' : 'Mettre en pause le défilement');
+    });
+  })();
+</script>
+
+<style>
+  .services {
+    background:
+      radial-gradient(ellipse 60% 40% at 85% 30%, rgba(74, 109, 140, 0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 15% 70%, rgba(212, 160, 74, 0.025) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0d0d0e 40%, #0e0d0c 60%, var(--black-deep) 100%);
+  }
+  .services__carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+  }
+  .services__carousel {
+    display: flex;
+    gap: 1.5rem;
+    animation: servicesScroll 30s linear infinite;
+    width: max-content;
+  }
+  @keyframes servicesScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .service-card {
+    position: relative;
+    flex: 0 0 300px;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    transition: border-color var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-fast) var(--ease-smooth),
+                box-shadow var(--duration-fast) var(--ease-smooth);
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--amber), var(--amber-dim));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-fast) var(--ease-cinematic);
+    border-radius: 12px 12px 0 0;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover {
+    border-color: var(--amber-dim);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  }
+  .service-card__icon {
+    width: 40px; height: 40px;
+    margin-bottom: 1.5rem;
+    stroke: var(--amber);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .service-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .service-card__desc {
+    font-size: 0.85rem;
+    color: var(--gray-light);
+    line-height: 1.7;
+  }
+  .service-card--soon { opacity: 0.6; }
+  .service-card__badge {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid var(--amber-dim);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .services__pause {
+    position: absolute;
+    bottom: -2rem; right: 1rem;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: border-color var(--duration-fast);
+  }
+  .services__pause:hover { border-color: var(--amber); }
+  .services__pause svg {
+    width: 14px; height: 14px;
+    fill: var(--gray-lighter);
+  }
+
+  @media (max-width: 768px) {
+    .services__carousel {
+      animation: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 1rem;
+    }
+    .service-card { scroll-snap-align: center; }
+    .services__carousel-wrapper {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+</style>

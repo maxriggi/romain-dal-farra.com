@@ -1,0 +1,242 @@
+- slug: bande-demo
+  title: Bande Démo
+  year: 2024
+  type: Showreel
+  category: realisateur
+  role: Réalisateur / Monteur
+  video_url: https://vimeo.com/356009875
+  thumbnail_source: vimeo
+  thumbnail_id: "356009875"
+  featured: false
+
+- slug: capitana-logo-animation
+  title: Capitana — Logo Animation
+  year: 2024
+  type: Motion Design
+  category: montage
+  role: Montage / Motion Design
+  video_url: https://vimeo.com/1179689512
+  thumbnail_source: vimeo
+  thumbnail_id: "1179689512"
+  featured: false
+
+- slug: enr-courtage
+  title: ENR Courtage
+  year: 2022
+  type: Corporate
+  category: realisateur
+  role: Réalisateur / Cadreur — Atypic Prod
+  video_url: https://www.youtube.com/watch?v=evhVx5nkPBs
+  thumbnail_source: youtube
+  thumbnail_id: evhVx5nkPBs
+  featured: false
+
+- slug: ministere-justice
+  title: Ministère de la Justice
+  year: 2022
+  type: Spot TV
+  category: cadreur
+  role: Gaffer — Douglass Prod / Atypic Prod
+  video_url: https://vimeo.com/756074703
+  thumbnail_source: vimeo
+  thumbnail_id: "756074703"
+  featured: false
+
+- slug: red-rock-center
+  title: Red Rock Center
+  year: 2022
+  type: Publicité
+  category: cadreur
+  role: 1er Asst. Camera / Gaffer — Mikado Publicis
+  video_url: https://www.youtube.com/watch?v=SFGNL1neIaU
+  thumbnail_source: youtube
+  thumbnail_id: SFGNL1neIaU
+  featured: false
+
+- slug: minett-unesco
+  title: Minett UNESCO Biosphere
+  year: 2022
+  type: Institutionnel
+  category: cadreur
+  role: 1er Asst. Camera / Cadreur / Gaffer
+  video_url: https://www.youtube.com/watch?v=u1yBxKfTE0g
+  thumbnail_source: youtube
+  thumbnail_id: u1yBxKfTE0g
+  featured: false
+
+- slug: loisirs-habitat
+  title: Loisirs Habitat Grand-Est
+  year: 2022
+  type: Publicité
+  category: cadreur
+  role: 1er Asst. Camera / Cadreur / Monteur
+  video_url: https://www.youtube.com/watch?v=kUl2a0BDwcQ
+  thumbnail_source: youtube
+  thumbnail_id: kUl2a0BDwcQ
+  featured: false
+
+- slug: sly-korben
+  title: SLY — Korben
+  year: 2021
+  type: Clip Musical
+  category: realisateur
+  role: Réalisateur
+  video_url: https://vimeo.com/609940325
+  thumbnail_source: vimeo
+  thumbnail_id: "609940325"
+  featured: true
+
+- slug: a-bientot-de-te-revoir
+  title: À Bientôt de te revoir
+  year: 2021
+  type: Série TV
+  category: cadreur
+  role: Gaffer / Op. Caméra — FranceTV Slash
+  video_url: https://www.youtube.com/watch?v=pD_q-itkU08
+  thumbnail_source: youtube
+  thumbnail_id: pD_q-itkU08
+  featured: false
+
+- slug: jeanne-to-forca
+  title: Jeanne to — FORCA
+  year: 2021
+  type: Clip Musical
+  category: realisateur
+  role: Réalisateur
+  video_url: https://vimeo.com/656593635
+  thumbnail_source: vimeo
+  thumbnail_id: "656593635"
+  featured: false
+
+- slug: ice-arena
+  title: Ice Arena
+  year: 2021
+  type: Publicité
+  category: realisateur
+  role: Réalisateur / Monteur
+  video_url: https://vimeo.com/596781245
+  thumbnail_source: vimeo
+  thumbnail_id: "596781245"
+  featured: false
+
+- slug: take-off-rtl
+  title: Take Off — RTL TV
+  year: 2021
+  type: Émission TV
+  category: cadreur
+  role: Gaffer
+  video_url: https://www.youtube.com/watch?v=YugR_pEirU4
+  thumbnail_source: youtube
+  thumbnail_id: YugR_pEirU4
+  featured: false
+
+- slug: panelux-fisher
+  title: Panelux / Fisher
+  year: 2021
+  type: Publicité
+  category: cadreur
+  role: Gaffer
+  video_url: https://www.youtube.com/watch?v=PFyDo6H8YPw
+  thumbnail_source: youtube
+  thumbnail_id: PFyDo6H8YPw
+  featured: false
+
+- slug: room-42
+  title: ROOM 42
+  year: 2020
+  type: Documentaire
+  category: dop
+  role: Directeur de la Photographie
+  video_url: https://www.youtube.com/watch?v=PniitdtSAXM
+  thumbnail_source: youtube
+  thumbnail_id: PniitdtSAXM
+  featured: false
+
+- slug: universite-luxembourg
+  title: Université de Luxembourg
+  year: 2020
+  type: Institutionnel
+  category: dop
+  role: Dir. Photo / Cadreur — Dept. Physique
+  video_url: https://www.youtube.com/watch?v=bO4IXO_ZzOA
+  thumbnail_source: youtube
+  thumbnail_id: bO4IXO_ZzOA
+  featured: false
+
+- slug: crise-et-chuchotements
+  title: Crise et chuchotements
+  year: 2020
+  type: Documentaire
+  category: montage
+  role: Montage — Bande annonce
+  video_url: https://www.youtube.com/watch?v=my4gk8yv14c
+  thumbnail_source: youtube
+  thumbnail_id: my4gk8yv14c
+  featured: false
+
+- slug: i-sacha-la-fame
+  title: I Sacha — La fame
+  year: 2019
+  type: Clip Musical
+  category: realisateur
+  role: Réalisateur
+  video_url: https://vimeo.com/359600019
+  thumbnail_source: vimeo
+  thumbnail_id: "359600019"
+  featured: false
+
+- slug: spinnup-stage
+  title: SpinnUp Stage
+  year: 2018
+  type: Aftermovie
+  category: realisateur
+  role: Réalisateur / Monteur
+  video_url: https://vimeo.com/292222468
+  thumbnail_source: vimeo
+  thumbnail_id: "292222468"
+  featured: true
+
+- slug: je-suis-une-presence
+  title: Je suis une présence
+  year: 2018
+  type: Court Métrage
+  category: realisateur
+  role: Réalisateur — Nikon Film Festival
+  video_url: https://vimeo.com/254307998
+  thumbnail_source: vimeo
+  thumbnail_id: "254307998"
+  featured: false
+
+- slug: fosbury
+  title: Fosbury
+  year: 2017
+  type: Court Métrage
+  category: dop
+  role: Dir. Photo — Réal. F.X. Mercoeur
+  video_url: https://www.youtube.com/watch?v=juz8pUXqSyg
+  thumbnail_source: youtube
+  thumbnail_id: juz8pUXqSyg
+  featured: false
+
+- slug: 80m2
+  title: 80 m²
+  year: 2016
+  type: Court Métrage
+  category: dop
+  role: Dir. Photo — Réal. P. Auer-Grumbach
+  video_url: https://vimeo.com/245328565
+  thumbnail_source: vimeo
+  thumbnail_id: "245328565"
+  featured: false
+
+# Projets featured sans lien vidéo (à compléter)
+- slug: pompidou
+  title: Pompidou
+  year: 2023
+  type: Institutionnel
+  category: realisateur
+  role: Réalisateur
+  video_url: ""
+  thumbnail_source: local
+  thumbnail_id: ""
+  featured: true

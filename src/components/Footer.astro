@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span class="footer__copy">&copy; {year} Romain Dal Farra. Tous droits réservés.</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--gray-dark);
+    padding: 2.5rem 0;
+    text-align: center;
+  }
+  .footer__inner {
+    width: var(--container-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer__copy {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+  }
+
+  @media (max-width: 600px) {
+    .footer__inner { flex-direction: column; }
+  }
+</style>

@@ -1,0 +1,59 @@
+competences:
+  - name: Réalisation & Direction artistique
+    level: 85
+  - name: Direction de la Photographie
+    level: 90
+  - name: Cadrage & Prise de vue caméra cinéma, broadcast, PTZ et hybride
+    level: 95
+  - name: Éclairage & Lumière événementiel, audiovisuel et cinématographique
+    level: 90
+  - name: Régie vidéo & Écrans LED
+    level: 80
+  - name: Montage scène concerts et événementiel
+    level: 75
+  - name: Post-Production & Étalonnage
+    level: 85
+  - name: Motion Design & Animation 2D
+    level: 75
+  - name: Pédagogie & Formation
+    level: 80
+  - name: Création de vidéo par IA
+    level: 70
+  - name: Machinerie caméra
+    level: 85
+
+logiciels:
+  - name: Final Cut Pro
+    category: montage
+  - name: DaVinci Resolve
+    category: montage
+  - name: Premiere Pro
+    category: montage
+  - name: After Effects
+    category: motion
+  - name: Adobe Audition
+    category: audio
+  - name: Photoshop
+    category: image
+  - name: Lightroom
+    category: image
+  - name: Illustrator
+    category: image
+  - name: InDesign
+    category: print
+  - name: Blender
+    category: 3d
+  - name: GrandMa3 Studio
+    category: lumiere
+  - name: Millumin5
+    category: lumiere
+  - name: Bitfocus Companion
+    category: regie
+  - name: Analog Way LiveCore
+    category: regie
+  - name: OBS Studio
+    category: regie
+  - name: Viplex
+    category: led
+  - name: Astera App
+    category: lumiere

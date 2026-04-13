@@ -1,0 +1,71 @@
+---
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const partners = yaml.parse(readFileSync('src/data/partners.yaml', 'utf-8'));
+---
+
+<section class="partners section" id="partenaires" aria-label="Partenaires">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">Partenaires</span>
+      <h2 class="section__heading">Ils m'ont fait confiance</h2>
+      <div class="section__divider"></div>
+    </div>
+
+    <div class="partners__carousel-wrapper">
+      <div class="partners__carousel">
+        {/* Original + duplicate for seamless loop */}
+        {[...partners, ...partners].map((partner: any) => (
+          <div class="partners__logo">
+            <img
+              src={`/partners/${partner.logo}`}
+              alt={partner.name}
+              loading="lazy"
+              width="120"
+              height="48"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .partners {
+    background: linear-gradient(180deg, var(--black-deep) 0%, #0e0e0f 50%, var(--black-deep) 100%);
+  }
+  .partners__carousel-wrapper {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+  .partners__carousel {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    animation: partnersScroll 25s linear infinite;
+    width: max-content;
+  }
+  @keyframes partnersScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .partners__logo {
+    flex: 0 0 auto;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .partners__logo img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1) opacity(0.5);
+    transition: filter 0.3s var(--ease-smooth);
+  }
+  .partners__logo:hover img {
+    filter: grayscale(0) opacity(1);
+  }
+</style>

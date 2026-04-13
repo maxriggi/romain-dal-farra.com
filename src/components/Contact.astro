@@ -1,0 +1,134 @@
+---
+---
+
+<section class="contact section" id="contact" aria-label="Contact">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">Contact</span>
+      <h2 class="section__heading">Travaillons ensemble</h2>
+      <div class="section__divider"></div>
+    </div>
+
+    <div class="contact__grid">
+      <div class="reveal-left">
+        <div class="contact__info">
+          <p class="contact__text">Vous avez un projet de film, une idée de clip, un besoin en image ? Parlons-en. Je suis disponible pour des collaborations dans toute la région Grand Est, en France, au Luxembourg et à l'international.</p>
+
+          <div class="contact__details">
+            <div class="contact__detail">
+              <svg class="contact__detail-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Metz, France — Grand Est</span>
+            </div>
+            <div class="contact__detail">
+              <svg class="contact__detail-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:contact@romain-dal-farra.com">contact@romain-dal-farra.com</a>
+            </div>
+          </div>
+
+          <div class="contact__socials">
+            <a href="https://www.instagram.com/romain_dalfarra/" target="_blank" rel="noopener noreferrer" class="contact__social" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://fr.linkedin.com/in/romain-dal-farra-b76231109" target="_blank" rel="noopener noreferrer" class="contact__social" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.crew-united.com/fr/Romain-Dal-Farra_637146.html" target="_blank" rel="noopener noreferrer" class="contact__social" aria-label="Crew United">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <form class="contact__form" id="contactForm" action="https://formspree.io/f/xpwdejkl" method="POST">
+          <div class="form-group">
+            <label class="form-group__label" for="contactName">Nom</label>
+            <input class="form-group__input" type="text" id="contactName" name="name" placeholder="Votre nom" required>
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="contactEmail">Email</label>
+            <input class="form-group__input" type="email" id="contactEmail" name="email" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="contactSubject">Sujet</label>
+            <input class="form-group__input" type="text" id="contactSubject" name="subject" placeholder="Sujet de votre message">
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="contactMessage">Message</label>
+            <textarea class="form-group__textarea" id="contactMessage" name="message" placeholder="Décrivez votre projet..." rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn-shutter">
+            Envoyer
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 80%, rgba(212, 160, 74, 0.04) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0f0e0c 30%, #12110f 60%, #0e0d0b 100%);
+  }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .contact__info { display: flex; flex-direction: column; gap: 2rem; }
+  .contact__text { color: var(--gray-lighter); font-size: 0.95rem; max-width: 400px; }
+  .contact__details { display: flex; flex-direction: column; gap: 1rem; }
+  .contact__detail { display: flex; align-items: center; gap: 0.75rem; color: var(--gray-lighter); font-size: 0.85rem; }
+  .contact__detail-icon { width: 18px; height: 18px; stroke: var(--amber); fill: none; stroke-width: 1.5; }
+  .contact__socials { display: flex; gap: 1rem; }
+  .contact__social {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    border: 1px solid var(--gray-dark);
+    transition: border-color var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-fast) var(--ease-smooth),
+                background var(--duration-fast) var(--ease-smooth);
+  }
+  .contact__social:hover {
+    border-color: var(--amber);
+    transform: translateY(-3px);
+    background: rgba(212, 160, 74, 0.08);
+  }
+  .contact__social svg {
+    width: 18px; height: 18px;
+    stroke: var(--gray-lighter); fill: none; stroke-width: 1.5;
+    transition: stroke var(--duration-fast) var(--ease-smooth);
+  }
+  .contact__social:hover svg { stroke: var(--amber); }
+  .contact__form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .form-group { position: relative; }
+  .form-group__label {
+    display: block;
+    font-family: var(--font-mono); font-size: 0.65rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gray); margin-bottom: 0.5rem;
+  }
+  .form-group__input, .form-group__textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    color: var(--white);
+    font-family: var(--font-body); font-size: 0.9rem;
+    transition: border-color var(--duration-fast) var(--ease-smooth),
+                box-shadow var(--duration-fast) var(--ease-smooth);
+  }
+  .form-group__input:focus, .form-group__textarea:focus {
+    outline: none;
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px var(--amber-glow);
+  }
+  .form-group__input::placeholder, .form-group__textarea::placeholder { color: var(--gray); }
+  .form-group__textarea { resize: vertical; min-height: 120px; }
+
+  @media (max-width: 768px) {
+    .contact__grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

@@ -1,0 +1,217 @@
+---
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const data = yaml.parse(readFileSync('src/data/skills.yaml', 'utf-8'));
+const competences = data.competences;
+const logiciels = data.logiciels;
+
+// Radar chart config
+const size = 300;
+const center = size / 2;
+const maxRadius = 120;
+const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
+const n = competences.length;
+
+function polarToCartesian(angle: number, radius: number) {
+  return {
+    x: center + radius * Math.cos(angle - Math.PI / 2),
+    y: center + radius * Math.sin(angle - Math.PI / 2),
+  };
+}
+
+// Grid polygons
+const gridPolygons = levels.map((level: number) => {
+  const points = [];
+  for (let i = 0; i < n; i++) {
+    const angle = (2 * Math.PI * i) / n;
+    const p = polarToCartesian(angle, maxRadius * level);
+    points.push(`${p.x},${p.y}`);
+  }
+  return points.join(' ');
+});
+
+// Data polygon
+const dataPoints = competences.map((c: any, i: number) => {
+  const angle = (2 * Math.PI * i) / n;
+  const p = polarToCartesian(angle, maxRadius * (c.level / 100));
+  return `${p.x},${p.y}`;
+}).join(' ');
+
+// Axis lines and labels
+const axes = competences.map((c: any, i: number) => {
+  const angle = (2 * Math.PI * i) / n;
+  const end = polarToCartesian(angle, maxRadius);
+  const labelPos = polarToCartesian(angle, maxRadius + 18);
+  // Shorten label for display
+  const shortName = c.name.split('&')[0].split(',')[0].trim();
+  return { x2: end.x, y2: end.y, labelX: labelPos.x, labelY: labelPos.y, name: shortName };
+});
+---
+
+<section class="skills section" id="competences" aria-label="Compétences et outils">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">Compétences</span>
+      <h2 class="section__heading">Savoir-faire & outils</h2>
+      <div class="section__divider"></div>
+    </div>
+
+    <div class="skills__grid">
+      <!-- Radar Chart -->
+      <div class="reveal-left">
+        <h3 class="skills__column-title">Compétences</h3>
+        <div class="skills__radar-wrapper">
+          <svg viewBox={`0 0 ${size} ${size}`} class="skills__radar" id="radarChart" role="img" aria-label="Diagramme radar des compétences">
+            <!-- Grid -->
+            {gridPolygons.map((points: string) => (
+              <polygon points={points} fill="none" stroke="rgba(212,160,74,0.1)" stroke-width="0.5" />
+            ))}
+            <!-- Axes -->
+            {axes.map((axis: any) => (
+              <line x1={center} y1={center} x2={axis.x2} y2={axis.y2} stroke="rgba(212,160,74,0.08)" stroke-width="0.5" />
+            ))}
+            <!-- Data -->
+            <polygon points={dataPoints} fill="rgba(212,160,74,0.15)" stroke="var(--amber)" stroke-width="1.5" class="radar-data" />
+            <!-- Dots -->
+            {competences.map((c: any, i: number) => {
+              const angle = (2 * Math.PI * i) / n;
+              const p = polarToCartesian(angle, maxRadius * (c.level / 100));
+              return <circle cx={p.x} cy={p.y} r="3" fill="var(--amber)" class="radar-dot" />;
+            })}
+            <!-- Labels -->
+            {axes.map((axis: any) => (
+              <text x={axis.labelX} y={axis.labelY} text-anchor="middle" dominant-baseline="central"
+                    fill="var(--gray-lighter)" font-size="6" font-family="var(--font-mono)">
+                {axis.name}
+              </text>
+            ))}
+          </svg>
+        </div>
+
+        <!-- Skill bars (alternative) -->
+        <div class="skills__bars">
+          {competences.map((c: any) => (
+            <div class="skill-item">
+              <div class="skill-item__header">
+                <span class="skill-item__name">{c.name}</span>
+              </div>
+              <div class="skill-item__bar">
+                <div class="skill-item__fill" style={`--skill-width: ${c.level}%`} data-width={c.level}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="reveal-right">
+        <h3 class="skills__column-title">Logiciels & Outils</h3>
+        <div class="tools-grid stagger-children" id="toolsGrid">
+          {logiciels.map((tool: any) => (
+            <div class="tool-pill">
+              <svg class="tool-pill__icon" viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              {tool.name}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const radar = document.getElementById('radarChart');
+    if (!radar) return;
+    const dataPolygon = radar.querySelector('.radar-data') as SVGPolygonElement;
+    const dots = radar.querySelectorAll('.radar-dot');
+    if (!dataPolygon) return;
+
+    // Store original points
+    const originalPoints = dataPolygon.getAttribute('points') || '';
+    const cx = 150, cy = 150;
+    const centerPoints = originalPoints.split(' ').map(() => `${cx},${cy}`).join(' ');
+
+    // Start from center
+    dataPolygon.setAttribute('points', centerPoints);
+    dots.forEach(d => { (d as SVGCircleElement).style.opacity = '0'; });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          dataPolygon.style.transition = 'all 1.5s cubic-bezier(0.22, 1, 0.36, 1)';
+          dataPolygon.setAttribute('points', originalPoints);
+          dots.forEach((d, i) => {
+            setTimeout(() => { (d as SVGCircleElement).style.opacity = '1'; (d as SVGCircleElement).style.transition = 'opacity 0.3s'; }, i * 80);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(radar);
+  })();
+</script>
+
+<style>
+  .skills {
+    background:
+      radial-gradient(ellipse 70% 50% at 90% 60%, rgba(212, 160, 74, 0.03) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 10% 30%, rgba(74, 109, 140, 0.03) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0e0e0f 35%, #100f0e 65%, var(--black-deep) 100%);
+  }
+  .skills__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .skills__column-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gray-dark);
+  }
+  .skills__radar-wrapper {
+    max-width: 400px;
+    margin: 0 auto 2rem;
+  }
+  .skills__radar { width: 100%; height: auto; }
+  .skills__bars { margin-top: 1rem; }
+  .skill-item { margin-bottom: 1.75rem; }
+  .skill-item__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .skill-item__name { font-size: 0.85rem; color: var(--gray-lighter); }
+  .skill-item__bar { height: 2px; background: var(--gray-dark); position: relative; overflow: hidden; }
+  .skill-item__fill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 1.5s var(--ease-cinematic);
+  }
+  .skill-item__fill.in-view { transform: scaleX(1); }
+  .tools-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .tool-pill {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    font-size: 0.8rem;
+    color: var(--gray-lighter);
+    transition: border-color var(--duration-fast) var(--ease-smooth),
+                color var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-fast) var(--ease-smooth);
+  }
+  .tool-pill:hover { border-color: var(--amber-dim); color: var(--amber-light); transform: translateY(-2px); }
+  .tool-pill__icon { width: 16px; height: 16px; stroke: var(--amber-dim); fill: none; stroke-width: 1.5; }
+
+  @media (max-width: 768px) {
+    .skills__grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

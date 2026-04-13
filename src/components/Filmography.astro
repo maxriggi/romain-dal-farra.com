@@ -1,0 +1,202 @@
+---
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const allProjects = yaml.parse(readFileSync('src/data/projects.yaml', 'utf-8'));
+const projects = allProjects.sort((a: any, b: any) => b.year - a.year);
+
+function getThumbnailUrl(project: any) {
+  if (project.thumbnail_source === 'vimeo') return `https://vumbnail.com/${project.thumbnail_id}.jpg`;
+  if (project.thumbnail_source === 'youtube') return `https://img.youtube.com/vi/${project.thumbnail_id}/hqdefault.jpg`;
+  return '';
+}
+---
+
+<section class="filmography section" id="filmographie" aria-label="Filmographie">
+  <div class="section__container">
+    <div class="reveal">
+      <span class="section__label">Filmographie</span>
+      <h2 class="section__heading">Projets sélectionnés</h2>
+      <div class="section__divider"></div>
+
+      <div class="filmography__filters" role="tablist" aria-label="Filtrer par rôle">
+        <button class="filmography__filter-btn active" data-filter="all" role="tab" aria-selected="true">Tous</button>
+        <button class="filmography__filter-btn" data-filter="realisateur" role="tab" aria-selected="false">Réalisateur</button>
+        <button class="filmography__filter-btn" data-filter="dop" role="tab" aria-selected="false">Dir. Photo</button>
+        <button class="filmography__filter-btn" data-filter="cadreur" role="tab" aria-selected="false">Cadreur / Gaffer</button>
+        <button class="filmography__filter-btn" data-filter="montage" role="tab" aria-selected="false">Montage</button>
+      </div>
+    </div>
+
+    <div class="filmography__grid" id="filmographyGrid">
+      {projects.map((project: any) => {
+        const thumbUrl = getThumbnailUrl(project);
+        return (
+          <a
+            class="film-card"
+            data-category={project.category}
+            href={project.video_url || '#'}
+            target={project.video_url ? '_blank' : undefined}
+            rel={project.video_url ? 'noopener' : undefined}
+          >
+            <div class="film-card__poster">
+              {thumbUrl ? (
+                <img class="film-card__poster-img" src={thumbUrl} alt={project.title} loading="lazy" />
+              ) : (
+                <div class="film-card__poster-placeholder">
+                  <svg class="film-card__poster-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
+              )}
+              <div class="film-card__play">
+                <div class="film-card__play-icon">
+                  <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="film-card__body">
+              <div class="film-card__meta">
+                <span class="film-card__year">{project.year}</span>
+                <span class="film-card__type">{project.type}</span>
+              </div>
+              <h3 class="film-card__title">{project.title}</h3>
+              <p class="film-card__role">{project.role}</p>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const buttons = document.querySelectorAll('.filmography__filter-btn');
+    const cards = document.querySelectorAll('#filmographyGrid .film-card');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        cards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            (card as HTMLElement).style.display = '';
+          } else {
+            (card as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .filmography {
+    background: linear-gradient(180deg, var(--black-deep) 0%, var(--black) 30%, var(--black) 70%, var(--black-deep) 100%);
+  }
+  .filmography__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .filmography__filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+    background: transparent;
+    border: 1px solid var(--gray-dark);
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-smooth);
+  }
+  .filmography__filter-btn:hover { color: var(--amber); border-color: var(--amber-dim); }
+  .filmography__filter-btn.active {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(212, 160, 74, 0.08);
+  }
+  .filmography__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .film-card {
+    position: relative;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-fast) var(--ease-smooth);
+  }
+  .film-card:hover { border-color: var(--amber-dim); transform: scale(1.02); }
+  .film-card__poster {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--black-soft);
+    overflow: hidden;
+  }
+  .film-card__poster-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.4) contrast(1.05);
+    transition: transform 0.6s var(--ease-smooth), filter 0.6s var(--ease-smooth);
+  }
+  .film-card:hover .film-card__poster-img {
+    transform: scale(1.08);
+    filter: grayscale(0) contrast(1.1) brightness(1.05);
+  }
+  .film-card__poster-placeholder {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--black-soft) 0%, var(--gray-dark) 100%);
+  }
+  .film-card__poster-icon {
+    width: 32px; height: 32px;
+    stroke: var(--gray); fill: none; stroke-width: 1.5;
+  }
+  .film-card__poster::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(212, 160, 74, 0.05);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-smooth);
+  }
+  .film-card:hover .film-card__poster::after { opacity: 1; }
+  .film-card__play {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-smooth);
+    z-index: 2;
+  }
+  .film-card:hover .film-card__play { opacity: 1; }
+  .film-card__play-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(212, 160, 74, 0.9);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform var(--duration-fast) var(--ease-smooth);
+  }
+  .film-card:hover .film-card__play-icon { transform: scale(1.1); }
+  .film-card__play-icon svg { width: 20px; height: 20px; fill: var(--black-deep); margin-left: 2px; }
+  .film-card__body { padding: 1.5rem; }
+  .film-card__meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .film-card__year { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--amber); }
+  .film-card__type {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gray);
+    padding: 2px 8px; border: 1px solid var(--gray-dark);
+  }
+  .film-card__title { font-family: var(--font-heading); font-size: 1.15rem; color: var(--white); margin-bottom: 0.35rem; }
+  .film-card__role { font-size: 0.8rem; color: var(--gray-light); }
+</style>

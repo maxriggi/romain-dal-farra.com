@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+import aboutImg from '../assets/portraits/about.webp';
+
+const aboutData = yaml.parse(readFileSync('src/data/about.yaml', 'utf-8'));
+---
+
+<section class="about section" id="a-propos" aria-label="À propos">
+  <div class="section__container">
+    <div class="about__grid">
+      <div class="wipe-reveal">
+        <div class="about__portrait">
+          <Image src={aboutImg} alt="Romain Dal Farra sur un tournage" class="about__portrait-img" width={600} height={800} loading="lazy" />
+        </div>
+      </div>
+
+      <div class="about__text reveal-right">
+        <span class="section__label">À propos</span>
+        <h2 class="section__heading">Romain Dal Farra</h2>
+        <div class="section__divider"></div>
+
+        <p>{aboutData.bio_intro}</p>
+
+        <blockquote class="about__quote">
+          « {aboutData.citation} »
+        </blockquote>
+
+        <p>{aboutData.bio_parcours}</p>
+        <p>{aboutData.bio_expertise}</p>
+        <p>{aboutData.bio_transmission}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 50%, rgba(212, 160, 74, 0.03) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 30%, #121210 50%, #0f0f0f 70%, var(--black-deep) 100%);
+  }
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .about__portrait {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background: var(--black-soft);
+    border: 1px solid var(--gray-dark);
+    overflow: hidden;
+  }
+  .about__portrait-img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.3) contrast(1.05);
+    transition: transform 1.2s var(--ease-cinematic), filter 0.6s var(--ease-smooth);
+  }
+  .about__portrait:hover .about__portrait-img {
+    transform: scale(1.04);
+    filter: grayscale(0) contrast(1.1);
+  }
+  .about__portrait::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(212,160,74,0.05) 0%, transparent 50%, rgba(74,109,140,0.05) 100%);
+    pointer-events: none;
+  }
+  .about__text p {
+    margin-bottom: 1.25rem;
+    color: var(--gray-lighter);
+    font-size: 0.95rem;
+  }
+  .about__text p:first-of-type::first-line { color: var(--white); }
+  .about__quote {
+    border-left: 2px solid var(--amber-dim);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--gray-light);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .about__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about__portrait { max-width: 280px; margin: 0 auto; }
+  }
+</style>

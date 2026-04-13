@@ -1,0 +1,48 @@
+- id: realisation
+  title: Réalisation
+  icon: clapperboard
+  description: >
+    Publicités, films d'entreprises ou institutionnels, événements publics ou privés,
+    concerts, clips musicaux, courts métrages ou documentaires. De la conception à la
+    livraison, je porte votre vision à l'écran avec une direction affirmée.
+
+- id: direction-photo
+  title: Direction de la Photographie
+  icon: aperture
+  description: >
+    Chef opérateur et directeur photo. J'apporte mon expertise sur l'ambiance visuelle
+    de vos projets pour être au plus proche de votre vision : éclairage, cadrage,
+    mouvements de caméra, colorimétrie.
+
+- id: post-production
+  title: Post-Production
+  icon: film-edit
+  description: >
+    Montage, étalonnage, effets visuels. Je donne vie à vos rushes en salle de montage
+    pour un rendu professionnel avec des créations visuelles dynamiques pour enrichir
+    vos productions.
+
+- id: technicien-plateau
+  title: Opérateur et Technicien plateau
+  icon: camera
+  description: >
+    Opérateur caméra, cadreur, gaffer, technicien lumière et vidéo. J'intègre vos équipes
+    images sur tous types de projets audiovisuels, événementiels ou cinématographiques.
+    Rig caméra, mise au point, cadrage, controller PTZ, écrans LED, régie vidéo, lights
+    et machinerie, je vous apporte mon expertise pour la réalisation de vos projets.
+
+- id: ateliers-cinema
+  title: Ateliers Cinéma
+  icon: users
+  description: >
+    Initiation et formation au cinéma pour tous les publics. Fiction, documentaire,
+    animation — découvrez le 7ème art par la théorie et la pratique. Développez un
+    programme autour de la pratique de l'audiovisuel et de ces métiers de la production
+    à l'image, avec la réalisation finale d'un projet audiovisuel ou cinématographique.
+
+- id: prise-de-vue-aerienne
+  title: Prise de vue aérienne
+  icon: drone
+  coming_soon: true
+  description: >
+    Prise de vue drone, j'immortalise vos moments en prenant de la hauteur.

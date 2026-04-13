@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import logoImg from '../assets/logos/logo1.png';
+---
+
+<nav class="nav" id="mainNav" aria-label="Navigation principale">
+  <a href="#" class="nav__logo">
+    <Image src={logoImg} alt="Romain Dal Farra" width={120} height={40} class="nav__logo-img" />
+  </a>
+
+  <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav__links" id="navLinks">
+    <li><a href="#a-propos" class="nav__link">À propos</a></li>
+    <li><a href="#services" class="nav__link">Services</a></li>
+    <li><a href="#filmographie" class="nav__link">Filmographie</a></li>
+    <li><a href="#competences" class="nav__link">Compétences</a></li>
+    <li><a href="#contact" class="nav__link">Contact</a></li>
+  </ul>
+</nav>
+
+<script>
+  (function() {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    if (!nav || !toggle || !links) return;
+    const heroHeight = window.innerHeight;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > heroHeight * 0.7) {
+        nav.classList.add('visible', 'scrolled');
+      } else {
+        nav.classList.remove('visible', 'scrolled');
+      }
+    }, { passive: true });
+
+    toggle.addEventListener('click', () => {
+      const isOpen = links.classList.toggle('open');
+      toggle.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+    });
+
+    links.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        links.classList.remove('open');
+        toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9990;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-med) var(--ease-cinematic);
+    transform: translateY(-100%);
+  }
+  .nav.visible { transform: translateY(0); }
+  .nav.scrolled {
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 160, 74, 0.1);
+  }
+  .nav__logo-img {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+  }
+  .nav__links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav__link {
+    position: relative;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gray-lighter);
+    transition: color var(--duration-fast) var(--ease-smooth);
+  }
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--amber);
+    transition: width var(--duration-fast) var(--ease-cinematic);
+  }
+  .nav__link:hover { color: var(--amber); }
+  .nav__link:hover::after { width: 100%; }
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 4px;
+    width: 28px;
+  }
+  .nav__toggle span {
+    display: block; height: 1px;
+    background: var(--white);
+    transition: transform var(--duration-fast) var(--ease-smooth), opacity var(--duration-fast);
+    transform-origin: center;
+  }
+  .nav__toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+  .nav__toggle.active span:nth-child(2) { opacity: 0; }
+  .nav__toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+  @media (max-width: 768px) {
+    .nav__toggle { display: flex; }
+    .nav__links {
+      position: fixed; inset: 0;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2.5rem;
+      background: rgba(10, 10, 10, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--duration-med) var(--ease-smooth);
+    }
+    .nav__links.open { opacity: 1; pointer-events: all; }
+    .nav__link { font-size: 1.2rem; }
+  }
+</style>
