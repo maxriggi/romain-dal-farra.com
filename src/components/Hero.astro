@@ -73,16 +73,43 @@
 <script>
   (function() {
     const video = document.getElementById('heroVideo');
-    if (!video) return;
+    if (!video) { console.warn('[HERO] No video element found'); return; }
 
-    // On mobile / reduced motion: don't play video
-    if (window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      video.pause();
-      return;
+    console.log('[HERO] Video element found, src:', video.querySelector('source')?.src);
+    console.log('[HERO] readyState:', video.readyState, 'paused:', video.paused, 'muted:', video.muted);
+
+    // Force muted attribute (some browsers need this)
+    video.muted = true;
+    video.setAttribute('muted', '');
+
+    // Try to play
+    var playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(function() {
+        console.log('[HERO] Video playing successfully');
+      }).catch(function(err) {
+        console.warn('[HERO] Autoplay blocked:', err.message);
+        // Try again on first user interaction
+        document.addEventListener('click', function tryPlay() {
+          video.muted = true;
+          video.play().then(function() {
+            console.log('[HERO] Video playing after user interaction');
+          }).catch(function() {});
+          document.removeEventListener('click', tryPlay);
+        }, { once: true });
+      });
     }
 
-    // Force play if autoplay was blocked
-    video.play().catch(function() {});
+    video.addEventListener('error', function(e) {
+      console.error('[HERO] Video error:', e);
+    });
+
+    var source = video.querySelector('source');
+    if (source) {
+      source.addEventListener('error', function(e) {
+        console.error('[HERO] Source error - video file not found or unsupported');
+      });
+    }
   })();
 </script>
 
