@@ -21,6 +21,8 @@ competences:
     level: 70
   - name: Machinerie caméra
     level: 85
+  - name: Photographie
+    level: 80
 
 logiciels:
   - name: Final Cut Pro

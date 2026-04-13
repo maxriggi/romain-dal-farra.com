@@ -40,6 +40,14 @@
     programme autour de la pratique de l'audiovisuel et de ces métiers de la production
     à l'image, avec la réalisation finale d'un projet audiovisuel ou cinématographique.
 
+- id: photographie
+  title: Photographie
+  icon: camera
+  description: >
+    Reportage, portrait, événementiel, packshot. Je capture l'instant avec un regard
+    cinématographique — composition soignée, lumière maîtrisée, post-traitement professionnel.
+    Disponible pour vos projets photo en studio ou en extérieur.
+
 - id: prise-de-vue-aerienne
   title: Prise de vue aérienne
   icon: drone
