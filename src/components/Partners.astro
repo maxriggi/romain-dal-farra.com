@@ -1,8 +1,17 @@
 ---
 import { readFileSync } from 'fs';
 import yaml from 'yaml';
+import { Image } from 'astro:assets';
 
 const partners = yaml.parse(readFileSync('src/data/partners.yaml', 'utf-8'));
+
+// Import all partner images dynamically
+const partnerImages = import.meta.glob<{ default: ImageMetadata }>('../assets/partners/*.*', { eager: true });
+
+function getPartnerImage(logo: string) {
+  const key = `../assets/partners/${logo}`;
+  return partnerImages[key]?.default;
+}
 ---
 
 <section class="partners section" id="partenaires" aria-label="Partenaires">
@@ -15,18 +24,18 @@ const partners = yaml.parse(readFileSync('src/data/partners.yaml', 'utf-8'));
 
     <div class="partners__carousel-wrapper">
       <div class="partners__carousel">
-        {/* Original + duplicate for seamless loop */}
-        {[...partners, ...partners].map((partner: any) => (
-          <div class="partners__logo">
-            <img
-              src={`/partners/${partner.logo}`}
-              alt={partner.name}
-              loading="lazy"
-              width="120"
-              height="48"
-            />
-          </div>
-        ))}
+        {[...partners, ...partners].map((partner: any) => {
+          const img = getPartnerImage(partner.logo);
+          return (
+            <div class="partners__logo">
+              {img ? (
+                <Image src={img} alt={partner.name} height={48} loading="lazy" />
+              ) : (
+                <span class="partners__logo-text">{partner.name}</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   </div>
@@ -67,5 +76,12 @@ const partners = yaml.parse(readFileSync('src/data/partners.yaml', 'utf-8'));
   }
   .partners__logo:hover img {
     filter: grayscale(0) opacity(1);
+  }
+  .partners__logo-text {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 </style>
