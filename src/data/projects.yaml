@@ -86,17 +86,6 @@
   thumbnail_id: "609940325"
   featured: true
 
-- slug: a-bientot-de-te-revoir
-  title: À Bientôt de te revoir
-  year: 2021
-  type: Série TV
-  category: cadreur
-  role: Technicien plateau — FranceTV Slash
-  video_url: https://www.youtube.com/watch?v=pD_q-itkU08
-  thumbnail_source: youtube
-  thumbnail_id: pD_q-itkU08
-  featured: true
-
 - slug: jeanne-to-forca
   title: Jeanne to — FORCA
   year: 2021
@@ -239,4 +228,15 @@
   thumbnail_source: vimeo
   thumbnail_id: "1183040912"
   thumbnail_url: https://i.vimeocdn.com/video/2145799749-ecabc5ed2eb2563987fd0c6d3142a6ac406ba64945e9c5b52160382dba3c6ada-d_640x360
+  featured: true
+
+- slug: a-bientot-de-te-revoir
+  title: À Bientôt de te revoir
+  year: 2021
+  type: Série TV
+  category: cadreur
+  role: Op. Caméra / Gaffer — FranceTV Slash
+  video_url: https://www.youtube.com/watch?v=pD_q-itkU08
+  thumbnail_source: youtube
+  thumbnail_id: pD_q-itkU08
   featured: true
