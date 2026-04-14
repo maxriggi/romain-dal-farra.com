@@ -1,4 +1,5 @@
 ---
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="hero" id="hero" aria-label="Accueil">
@@ -52,11 +53,11 @@
     <p class="hero__subtitle" id="heroSubtitle">Création audiovisuelle — Post production — Technicien plateau</p>
 
     <div class="hero__ctas">
-      <a href="#filmographie" class="btn-shutter">
+      <a href={`${base}/filmographie`} class="btn-shutter">
         Mes projets
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="#contact" class="btn-shutter btn-shutter--ghost">
+      <a href={`${base}/contact`} class="btn-shutter btn-shutter--ghost">
         Me contacter
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>

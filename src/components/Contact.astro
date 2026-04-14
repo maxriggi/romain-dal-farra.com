@@ -1,13 +1,20 @@
 ---
+interface Props {
+  showHeader?: boolean;
+}
+
+const { showHeader = true } = Astro.props;
 ---
 
 <section class="contact section" id="contact" aria-label="Contact">
   <div class="section__container">
-    <div class="reveal">
-      <span class="section__label">Contact</span>
-      <h2 class="section__heading">Travaillons ensemble</h2>
-      <div class="section__divider"></div>
-    </div>
+    {showHeader && (
+      <div class="reveal">
+        <span class="section__label">Contact</span>
+        <h2 class="section__heading">Travaillons ensemble</h2>
+        <div class="section__divider"></div>
+      </div>
+    )}
 
     <div class="contact__grid">
       <div class="reveal-left">

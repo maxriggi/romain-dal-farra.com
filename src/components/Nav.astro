@@ -2,6 +2,16 @@
 import { Image } from 'astro:assets';
 import logoImg from '../assets/logos/logo1.png';
 const base = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+
+const navLinks = [
+  { href: '/a-propos', label: 'À propos' },
+  { href: '/services', label: 'Services' },
+  { href: '/filmographie', label: 'Filmographie' },
+  { href: '/photographie', label: 'Photographie' },
+  { href: '/competences', label: 'Compétences' },
+  { href: '/contact', label: 'Contact' },
+];
 ---
 
 <nav class="nav" id="mainNav" aria-label="Navigation principale">
@@ -14,12 +24,13 @@ const base = import.meta.env.BASE_URL;
   </button>
 
   <ul class="nav__links" id="navLinks">
-    <li><a href={`${base}/#a-propos`} class="nav__link">À propos</a></li>
-    <li><a href={`${base}/#services`} class="nav__link">Services</a></li>
-    <li><a href={`${base}/#filmographie`} class="nav__link">Filmographie</a></li>
-    <li><a href={`${base}/photographie`} class="nav__link">Photographie</a></li>
-    <li><a href={`${base}/#competences`} class="nav__link">Compétences</a></li>
-    <li><a href={`${base}/#contact`} class="nav__link">Contact</a></li>
+    {navLinks.map(({ href, label }) => {
+      const fullHref = `${base}${href}`;
+      const isActive = currentPath === fullHref.replace(/\/$/, '');
+      return (
+        <li><a href={fullHref} class={`nav__link${isActive ? ' nav__link--active' : ''}`}>{label}</a></li>
+      );
+    })}
   </ul>
 </nav>
 
@@ -110,6 +121,8 @@ const base = import.meta.env.BASE_URL;
   }
   .nav__link:hover { color: var(--amber); }
   .nav__link:hover::after { width: 100%; }
+  .nav__link--active { color: var(--amber); }
+  .nav__link--active::after { width: 100%; }
   .nav__toggle {
     display: none;
     flex-direction: column;

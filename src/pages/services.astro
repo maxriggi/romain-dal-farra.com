@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import Services from '../components/Services.astro';
+import SectionCta from '../components/SectionCta.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Services — Réalisation, Post-production, Dir. Photo | Romain Dal Farra"
+  description="Réalisation vidéo, direction de la photographie, post-production, cadrage, photographie et technicien plateau. Services audiovisuels freelance à Metz, Grand Est et Luxembourg."
+  ogTitle="Services — Romain Dal Farra"
+  ogDescription="Réalisation vidéo, direction photo, post-production et plus. Services audiovisuels freelance à Metz."
+>
+  <Nav />
+  <PageHero
+    label="Services"
+    title="Ce que je propose"
+    subtitle="De la conception à la livraison, un accompagnement complet pour vos projets audiovisuels."
+  />
+
+  <Services variant="full" showHeader={false} />
+
+  <div class="section-separator"></div>
+
+  <!-- Process section -->
+  <section class="process section">
+    <div class="section__container">
+      <div class="reveal">
+        <span class="section__label">Méthode</span>
+        <h2 class="section__heading">Comment je travaille</h2>
+        <div class="section__divider"></div>
+      </div>
+
+      <div class="process__grid">
+        <div class="process__step reveal">
+          <span class="process__number">01</span>
+          <h3 class="process__title">Échange & brief</h3>
+          <p class="process__desc">On discute de votre projet, vos objectifs, votre vision. Je vous conseille sur l'approche la plus adaptée.</p>
+        </div>
+        <div class="process__step reveal">
+          <span class="process__number">02</span>
+          <h3 class="process__title">Pré-production</h3>
+          <p class="process__desc">Scénarisation, repérages, casting, planification technique. Chaque détail est anticipé pour un tournage efficace.</p>
+        </div>
+        <div class="process__step reveal">
+          <span class="process__number">03</span>
+          <h3 class="process__title">Production</h3>
+          <p class="process__desc">Tournage avec du matériel professionnel. Direction d'acteurs, cadrage, lumière — tout est maîtrisé sur le terrain.</p>
+        </div>
+        <div class="process__step reveal">
+          <span class="process__number">04</span>
+          <h3 class="process__title">Post-production & livraison</h3>
+          <p class="process__desc">Montage, étalonnage, sound design, exports multi-formats. Vous recevez un produit fini prêt à diffuser.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-separator"></div>
+
+  <section class="cta-section section">
+    <div class="section__container" style="text-align: center;">
+      <p class="cta-section__text">Un projet en tête ? Discutons-en.</p>
+      <SectionCta href="/contact" label="Me contacter" />
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .process {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(212, 160, 74, 0.03) 0%, transparent 70%),
+      linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
+  }
+  .process__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .process__step {
+    position: relative;
+    padding: 2rem;
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    border-radius: 8px;
+    transition: border-color var(--duration-fast) var(--ease-smooth);
+  }
+  .process__step:hover {
+    border-color: var(--amber-dim);
+  }
+  .process__number {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--amber);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .process__title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .process__desc {
+    font-size: 0.85rem;
+    color: var(--gray-light);
+    line-height: 1.7;
+  }
+  .cta-section {
+    background: transparent;
+  }
+  .cta-section__text {
+    color: var(--gray-lighter);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+</style>

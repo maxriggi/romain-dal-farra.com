@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import About from '../components/About.astro';
+import Partners from '../components/Partners.astro';
+import SectionCta from '../components/SectionCta.astro';
+import Footer from '../components/Footer.astro';
+import { readFileSync } from 'fs';
+import yaml from 'yaml';
+
+const aboutData = yaml.parse(readFileSync('src/data/about.yaml', 'utf-8'));
+
+const parcours = [
+  { year: '2012', label: 'Bac STI Electrotechnique — Metz' },
+  { year: '2015', label: 'Licence Cinéma — IECA Nancy' },
+  { year: '2015', label: 'Début activité freelance — Grand Est' },
+  { year: '2016', label: 'Master Production & Réalisation documentaire — IECA' },
+  { year: '2020', label: 'Expansion Luxembourg & international' },
+  { year: "Auj.", label: 'Réalisateur, Dir. Photo & Technicien plateau' },
+];
+---
+
+<BaseLayout
+  title="À propos — Romain Dal Farra, Réalisateur & Dir. Photo | Metz"
+  description="Découvrez le parcours de Romain Dal Farra, réalisateur et directeur de la photographie freelance basé à Metz. Formation IECA Nancy, expérience depuis 2015 en Grand Est et Luxembourg."
+  ogTitle="À propos — Romain Dal Farra"
+  ogDescription="Réalisateur et directeur de la photographie freelance. Parcours, formation et vision artistique."
+>
+  <Nav />
+  <PageHero
+    label="À propos"
+    title="Romain Dal Farra"
+    subtitle="Réalisateur & Directeur de la Photographie — Metz, Grand Est"
+  />
+
+  <About variant="full" showHeader={false} />
+
+  <div class="section-separator"></div>
+
+  <!-- Parcours timeline -->
+  <section class="timeline section">
+    <div class="section__container">
+      <div class="reveal">
+        <span class="section__label">Parcours</span>
+        <h2 class="section__heading">Mon chemin</h2>
+        <div class="section__divider"></div>
+      </div>
+
+      <div class="timeline__track">
+        {parcours.map((item, i) => (
+          <div class="timeline__item reveal">
+            <span class="timeline__year">{item.year}</span>
+            <div class="timeline__dot"></div>
+            <p class="timeline__label">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="section-separator"></div>
+
+  <Partners />
+
+  <div class="section-separator"></div>
+
+  <section class="cta-section section">
+    <div class="section__container" style="text-align: center;">
+      <p class="cta-section__text">Envie de collaborer sur un projet ?</p>
+      <SectionCta href="/contact" label="Me contacter" />
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .timeline {
+    background: linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
+  }
+  .timeline__track {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-left: 2rem;
+    border-left: 1px solid var(--gray-dark);
+    margin-top: 2rem;
+  }
+  .timeline__item {
+    position: relative;
+    padding: 1.5rem 0 1.5rem 2rem;
+  }
+  .timeline__dot {
+    position: absolute;
+    left: -2.55rem;
+    top: 1.85rem;
+    width: 10px;
+    height: 10px;
+    background: var(--amber);
+    border-radius: 50%;
+    border: 2px solid var(--black-deep);
+  }
+  .timeline__year {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    text-transform: uppercase;
+  }
+  .timeline__label {
+    font-size: 0.95rem;
+    color: var(--gray-lighter);
+    margin-top: 0.25rem;
+  }
+  .cta-section {
+    background: transparent;
+  }
+  .cta-section__text {
+    color: var(--gray-lighter);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .timeline__track {
+      padding-left: 1.5rem;
+    }
+    .timeline__item {
+      padding-left: 1.5rem;
+    }
+    .timeline__dot {
+      left: -2.05rem;
+    }
+  }
+</style>

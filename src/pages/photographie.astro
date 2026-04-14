@@ -37,7 +37,12 @@ const standaloneImages = Object.entries(allImages)
   .map(([path, mod]) => ({ path, image: mod.default }));
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="Photographie — Portfolio Photo | Romain Dal Farra"
+  description="Portfolio photo de Romain Dal Farra : reportages, portraits, événementiel. Un regard cinématographique sur chaque instant. Photographe freelance Metz, Grand Est."
+  ogTitle="Photographie — Romain Dal Farra"
+  ogDescription="Portfolio photo : reportages, portraits, événementiel. Photographe freelance Metz."
+>
   <Nav />
 
   <section class="photo-hero">

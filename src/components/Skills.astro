@@ -2,6 +2,13 @@
 import { readFileSync } from 'fs';
 import yaml from 'yaml';
 
+interface Props {
+  variant?: 'teaser' | 'full';
+  showHeader?: boolean;
+}
+
+const { variant = 'full', showHeader = true } = Astro.props;
+const isTeaser = variant === 'teaser';
 const data = yaml.parse(readFileSync('src/data/skills.yaml', 'utf-8'));
 const competences = data.competences;
 const logiciels = data.logiciels;
@@ -51,16 +58,18 @@ const axes = competences.map((c: any, i: number) => {
 
 <section class="skills section" id="competences" aria-label="Compétences et outils">
   <div class="section__container">
-    <div class="reveal">
-      <span class="section__label">Compétences</span>
-      <h2 class="section__heading">Savoir-faire & outils</h2>
-      <div class="section__divider"></div>
-    </div>
+    {showHeader && (
+      <div class="reveal">
+        <span class="section__label">Compétences</span>
+        <h2 class="section__heading">Savoir-faire & outils</h2>
+        <div class="section__divider"></div>
+      </div>
+    )}
 
-    <div class="skills__grid">
+    <div class={isTeaser ? 'skills__grid skills__grid--teaser' : 'skills__grid'}>
       <!-- Radar Chart -->
       <div class="reveal-left">
-        <h3 class="skills__column-title">Compétences</h3>
+        {!isTeaser && <h3 class="skills__column-title">Compétences</h3>}
         <div class="skills__radar-wrapper">
           <svg viewBox={`0 0 ${size} ${size}`} class="skills__radar" id="radarChart" role="img" aria-label="Diagramme radar des compétences">
             <!-- Grid -->
@@ -89,37 +98,39 @@ const axes = competences.map((c: any, i: number) => {
           </svg>
         </div>
 
-        <!-- Skill bars (alternative) -->
-        <div class="skills__bars">
-          {competences.map((c: any) => (
-            <div class="skill-item">
-              <div class="skill-item__header">
-                <span class="skill-item__name">{c.name}</span>
+        {!isTeaser && (
+          <div class="skills__bars">
+            {competences.map((c: any) => (
+              <div class="skill-item">
+                <div class="skill-item__header">
+                  <span class="skill-item__name">{c.name}</span>
+                </div>
+                <div class="skill-item__bar">
+                  <div class="skill-item__fill" style={`--skill-width: ${c.level}%`} data-width={c.level}></div>
+                </div>
               </div>
-              <div class="skill-item__bar">
-                <div class="skill-item__fill" style={`--skill-width: ${c.level}%`} data-width={c.level}></div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <!-- Tools -->
-      <div class="reveal-right">
-        <h3 class="skills__column-title">Logiciels & Outils</h3>
-        <div class="tools-grid stagger-children" id="toolsGrid">
-          {logiciels.map((tool: any) => (
-            <div class="tool-pill">
-              <svg class="tool-pill__icon" viewBox="0 0 24 24">
-                <rect x="2" y="3" width="20" height="14" rx="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
-              {tool.name}
-            </div>
-          ))}
+      {!isTeaser && (
+        <div class="reveal-right">
+          <h3 class="skills__column-title">Logiciels & Outils</h3>
+          <div class="tools-grid stagger-children" id="toolsGrid">
+            {logiciels.map((tool: any) => (
+              <div class="tool-pill">
+                <svg class="tool-pill__icon" viewBox="0 0 24 24">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                {tool.name}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </div>
 </section>
@@ -210,6 +221,12 @@ const axes = competences.map((c: any, i: number) => {
   }
   .tool-pill:hover { border-color: var(--amber-dim); color: var(--amber-light); transform: translateY(-2px); }
   .tool-pill__icon { width: 16px; height: 16px; stroke: var(--amber-dim); fill: none; stroke-width: 1.5; }
+
+  .skills__grid--teaser {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
 
   @media (max-width: 768px) {
     .skills__grid { grid-template-columns: 1fr; gap: 3rem; }

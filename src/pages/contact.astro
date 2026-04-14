@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Contact — Romain Dal Farra | Metz, Grand Est"
+  description="Contactez Romain Dal Farra pour vos projets audiovisuels. Disponible en Grand Est, France et Luxembourg. Réalisation, direction photo, post-production."
+  ogTitle="Contact — Romain Dal Farra"
+  ogDescription="Disponible pour vos projets audiovisuels en Grand Est et Luxembourg. Parlons de votre projet."
+>
+  <Nav />
+  <PageHero
+    label="Contact"
+    title="Travaillons ensemble"
+    subtitle="Vous avez un projet de film, une idée de clip, un besoin en image ? Parlons-en."
+  />
+  <Contact showHeader={false} />
+  <Footer />
+</BaseLayout>

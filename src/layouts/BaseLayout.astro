@@ -2,6 +2,20 @@
 import '../styles/global.css';
 import '../styles/typography.css';
 import '../styles/animations.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const {
+  title = "Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz, France",
+  description = "Romain Dal Farra — Réalisateur et directeur de la photographie freelance basé à Metz. Création audiovisuelle, post-production, technicien plateau. Films institutionnels, clips musicaux, courts métrages.",
+  ogTitle = "Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz",
+  ogDescription = "Réalisateur et directeur de la photographie freelance. Création audiovisuelle, post-production, technicien plateau.",
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -9,13 +23,13 @@ import '../styles/animations.css';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Romain Dal Farra — Réalisateur et directeur de la photographie freelance basé à Metz. Création audiovisuelle, post-production, technicien plateau. Films institutionnels, clips musicaux, courts métrages.">
+  <meta name="description" content={description}>
   <meta name="keywords" content="réalisateur Metz, directeur photographie Lorraine, chef opérateur freelance, cadreur, création audiovisuelle, post-production, technicien plateau, Romain Dal Farra">
   <meta name="author" content="Romain Dal Farra">
   <meta name="robots" content="index, follow">
 
-  <meta property="og:title" content="Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz">
-  <meta property="og:description" content="Réalisateur et directeur de la photographie freelance. Création audiovisuelle, post-production, technicien plateau.">
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={ogDescription}>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://romain-dal-farra.com">
   <meta property="og:locale" content="fr_FR">
@@ -42,7 +56,7 @@ import '../styles/animations.css';
   </script>
 
   <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}/favicon.svg`}>
-  <title>Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz, France</title>
+  <title>{title}</title>
 </head>
 <body>
 
