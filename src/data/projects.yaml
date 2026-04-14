@@ -91,11 +91,11 @@
   year: 2021
   type: Série TV
   category: cadreur
-  role: Gaffer / Op. Caméra — FranceTV Slash
+  role: Technicien plateau — FranceTV Slash
   video_url: https://www.youtube.com/watch?v=pD_q-itkU08
   thumbnail_source: youtube
   thumbnail_id: pD_q-itkU08
-  featured: false
+  featured: true
 
 - slug: jeanne-to-forca
   title: Jeanne to — FORCA
