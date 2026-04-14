@@ -229,14 +229,13 @@
   thumbnail_id: "245328565"
   featured: false
 
-# Projets featured sans lien vidéo (à compléter)
 - slug: pompidou
-  title: Pompidou
+  title: Pompidou — Katharina Grosse
   year: 2023
   type: Institutionnel
   category: realisateur
   role: Réalisateur
-  video_url: ""
-  thumbnail_source: local
-  thumbnail_id: ""
+  video_url: https://vimeo.com/1183040912
+  thumbnail_source: vimeo
+  thumbnail_id: "1183040912"
   featured: true
