@@ -102,9 +102,10 @@ const {
       const apertureHole = document.getElementById('apertureHole');
 
       function openAperture() {
-        if (prefersReducedMotion) {
+        const hasHero = document.getElementById('hero');
+        if (prefersReducedMotion || !hasHero) {
           apertureOverlay.style.display = 'none';
-          revealHeroContent();
+          if (hasHero) revealHeroContent();
           return;
         }
         let start = null;
