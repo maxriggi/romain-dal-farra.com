@@ -49,6 +49,7 @@ function getThumbnailUrl(project: any) {
           <a
             class="film-card"
             data-category={project.category}
+            data-slug={project.slug}
             href={project.video_url || '#'}
             target={project.video_url ? '_blank' : undefined}
             rel={project.video_url ? 'noopener' : undefined}
@@ -95,11 +96,21 @@ function getThumbnailUrl(project: any) {
         btn.setAttribute('aria-selected', 'true');
 
         cards.forEach(card => {
-          if (filter === 'all' || card.getAttribute('data-category') === filter) {
-            (card as HTMLElement).style.display = '';
+          const cat = card.getAttribute('data-category');
+          const slug = card.getAttribute('data-slug');
+          let show = false;
+
+          if (filter === 'all') {
+            show = true;
+          } else if (filter === 'montage') {
+            show = cat === 'montage'
+              || (cat === 'realisateur' && slug !== 'enr-courtage')
+              || slug === 'loisirs-habitat';
           } else {
-            (card as HTMLElement).style.display = 'none';
+            show = cat === filter;
           }
+
+          (card as HTMLElement).style.display = show ? '' : 'none';
         });
       });
     });
