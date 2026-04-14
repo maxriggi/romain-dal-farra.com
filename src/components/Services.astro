@@ -38,8 +38,8 @@ const iconPaths: Record<string, string> = {
 
     <div class="services__carousel-wrapper">
       <div class="services__carousel" id="servicesCarousel">
-        {[...services, ...services].map((service: any, i: number) => (
-          <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`}>
+        {services.map((service: any, i: number) => (
+          <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`} data-index={i}>
             <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
             <h3 class="service-card__title">{service.title}</h3>
             <p class="service-card__desc">{service.description}</p>
@@ -48,10 +48,11 @@ const iconPaths: Record<string, string> = {
         ))}
       </div>
 
-      <button class="services__pause" id="servicesPause" aria-label="Mettre en pause le défilement">
-        <svg viewBox="0 0 24 24" class="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        <svg viewBox="0 0 24 24" class="play-icon" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
-      </button>
+      <div class="services__dots" id="servicesDots">
+        {services.map((_: any, i: number) => (
+          <button class={`services__dot ${i === 0 ? 'active' : ''}`} data-index={i} aria-label={`Aller au service ${i + 1}`}></button>
+        ))}
+      </div>
     </div>
   </div>
 </section>
@@ -59,20 +60,36 @@ const iconPaths: Record<string, string> = {
 <script>
   (function() {
     const carousel = document.getElementById('servicesCarousel');
-    const pauseBtn = document.getElementById('servicesPause');
-    if (!carousel || !pauseBtn) return;
+    const dots = document.querySelectorAll('#servicesDots .services__dot');
+    if (!carousel || !dots.length) return;
 
-    let isPaused = false;
+    // Wheel → horizontal scroll
+    carousel.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        carousel.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
 
-    carousel.addEventListener('mouseenter', () => { if (!isPaused) carousel.style.animationPlayState = 'paused'; });
-    carousel.addEventListener('mouseleave', () => { if (!isPaused) carousel.style.animationPlayState = 'running'; });
+    // Update dots on scroll
+    let scrollTimeout: number;
+    carousel.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const cardWidth = 300 + 24; // card width + gap
+        const index = Math.round(carousel.scrollLeft / cardWidth);
+        const clamped = Math.min(index, dots.length - 1);
+        dots.forEach((d, i) => d.classList.toggle('active', i === clamped));
+      }, 50);
+    }, { passive: true });
 
-    pauseBtn.addEventListener('click', () => {
-      isPaused = !isPaused;
-      carousel.style.animationPlayState = isPaused ? 'paused' : 'running';
-      pauseBtn.querySelector('.pause-icon').style.display = isPaused ? 'none' : 'block';
-      pauseBtn.querySelector('.play-icon').style.display = isPaused ? 'block' : 'none';
-      pauseBtn.setAttribute('aria-label', isPaused ? 'Reprendre le défilement' : 'Mettre en pause le défilement');
+    // Click dots to scroll
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const index = Number(dot.getAttribute('data-index'));
+        const cardWidth = 300 + 24;
+        carousel.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+      });
     });
   })();
 </script>
@@ -86,20 +103,20 @@ const iconPaths: Record<string, string> = {
   }
   .services__carousel-wrapper {
     position: relative;
-    overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
   }
   .services__carousel {
     display: flex;
     gap: 1.5rem;
-    animation: servicesScroll 30s linear infinite;
-    width: max-content;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 1rem 0;
   }
-  @keyframes servicesScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  .services__carousel::-webkit-scrollbar { display: none; }
 
   .service-card {
     position: relative;
@@ -108,6 +125,7 @@ const iconPaths: Record<string, string> = {
     border: 1px solid var(--gray-dark);
     border-radius: 12px;
     padding: 2.5rem 2rem;
+    scroll-snap-align: start;
     transition: border-color var(--duration-fast) var(--ease-smooth),
                 transform var(--duration-fast) var(--ease-smooth),
                 box-shadow var(--duration-fast) var(--ease-smooth);
@@ -164,43 +182,34 @@ const iconPaths: Record<string, string> = {
     border-radius: 4px;
   }
 
-  .services__pause {
-    position: absolute;
-    bottom: -2rem; right: 1rem;
-    background: var(--black-card);
-    border: 1px solid var(--gray-dark);
+  .services__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .services__dot {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--gray-dark);
+    background: transparent;
     cursor: pointer;
-    transition: border-color var(--duration-fast);
+    padding: 0;
+    transition: background var(--duration-fast) var(--ease-smooth),
+                border-color var(--duration-fast) var(--ease-smooth),
+                transform var(--duration-fast) var(--ease-smooth);
   }
-  .services__pause:hover { border-color: var(--amber); }
-  .services__pause svg {
-    width: 14px; height: 14px;
-    fill: var(--gray-lighter);
+  .services__dot:hover {
+    border-color: var(--amber-dim);
   }
-
-  .services__static-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-  .services__static-grid .service-card {
-    flex: unset;
+  .services__dot.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    transform: scale(1.3);
   }
 
   @media (max-width: 768px) {
-    .services__carousel {
-      animation: none;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 0 1rem;
-    }
-    .service-card { scroll-snap-align: center; }
-    .services__carousel-wrapper {
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
+    .service-card { flex: 0 0 260px; }
   }
 </style>
