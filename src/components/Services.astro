@@ -10,7 +10,7 @@ interface Props {
 const { variant = 'full', showHeader = true } = Astro.props;
 const allServices = yaml.parse(readFileSync('src/data/services.yaml', 'utf-8'));
 const isTeaser = variant === 'teaser';
-const services = isTeaser ? allServices.slice(0, 4) : allServices;
+const services = allServices;
 
 const iconPaths: Record<string, string> = {
   clapperboard: '<path d="M4 2l4 4H4zM8 2l4 4H8zM12 2l4 4h-4zM16 2l4 4h-4z"/><rect x="2" y="6" width="20" height="14" rx="2"/>',
@@ -36,9 +36,9 @@ const iconPaths: Record<string, string> = {
       </div>
     )}
 
-    {isTeaser ? (
-      <div class="services__static-grid">
-        {services.map((service: any) => (
+    <div class="services__carousel-wrapper">
+      <div class="services__carousel" id="servicesCarousel">
+        {[...services, ...services].map((service: any, i: number) => (
           <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`}>
             <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
             <h3 class="service-card__title">{service.title}</h3>
@@ -47,25 +47,12 @@ const iconPaths: Record<string, string> = {
           </article>
         ))}
       </div>
-    ) : (
-      <div class="services__carousel-wrapper">
-        <div class="services__carousel" id="servicesCarousel">
-          {[...services, ...services].map((service: any, i: number) => (
-            <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`}>
-              <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
-              <h3 class="service-card__title">{service.title}</h3>
-              <p class="service-card__desc">{service.description}</p>
-              {service.coming_soon && <span class="service-card__badge">Bientôt</span>}
-            </article>
-          ))}
-        </div>
 
-        <button class="services__pause" id="servicesPause" aria-label="Mettre en pause le défilement">
-          <svg viewBox="0 0 24 24" class="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          <svg viewBox="0 0 24 24" class="play-icon" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
-        </button>
-      </div>
-    )}
+      <button class="services__pause" id="servicesPause" aria-label="Mettre en pause le défilement">
+        <svg viewBox="0 0 24 24" class="pause-icon"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg viewBox="0 0 24 24" class="play-icon" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
+      </button>
+    </div>
   </div>
 </section>
 
