@@ -5,14 +5,6 @@ import PageHero from '../components/PageHero.astro';
 import Filmography from '../components/Filmography.astro';
 import SectionCta from '../components/SectionCta.astro';
 import Footer from '../components/Footer.astro';
-import { readFileSync } from 'fs';
-import yaml from 'yaml';
-
-const allProjects = yaml.parse(readFileSync('src/data/projects.yaml', 'utf-8'));
-const totalProjects = allProjects.length;
-const years = [...new Set(allProjects.map((p: any) => p.year))].sort();
-const firstYear = years[0];
-const lastYear = years[years.length - 1];
 ---
 
 <BaseLayout
@@ -25,28 +17,8 @@ const lastYear = years[years.length - 1];
   <PageHero
     label="Filmographie"
     title="Projets sélectionnés"
-    subtitle={`${totalProjects} projets de ${firstYear} à ${lastYear} — films, clips, pubs, institutionnels.`}
+    subtitle="Films institutionnels, clips musicaux, courts métrages, publicités — depuis 2015."
   />
-
-  <!-- Stats bar -->
-  <section class="stats section">
-    <div class="section__container">
-      <div class="stats__grid">
-        <div class="stats__item reveal">
-          <span class="stats__number">{totalProjects}</span>
-          <span class="stats__label">Projets</span>
-        </div>
-        <div class="stats__item reveal">
-          <span class="stats__number">{lastYear - firstYear}+</span>
-          <span class="stats__label">Années d'expérience</span>
-        </div>
-        <div class="stats__item reveal">
-          <span class="stats__number">4</span>
-          <span class="stats__label">Casquettes</span>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <Filmography variant="full" showHeader={false} />
 
@@ -63,34 +35,6 @@ const lastYear = years[years.length - 1];
 </BaseLayout>
 
 <style>
-  .stats {
-    background: transparent;
-    padding: 2rem 0;
-  }
-  .stats__grid {
-    display: flex;
-    justify-content: center;
-    gap: 4rem;
-    flex-wrap: wrap;
-  }
-  .stats__item {
-    text-align: center;
-  }
-  .stats__number {
-    display: block;
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: var(--amber);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-  .stats__label {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gray);
-  }
   .cta-section {
     background: transparent;
   }
