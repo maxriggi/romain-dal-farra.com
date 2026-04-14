@@ -6,6 +6,7 @@ const allProjects = yaml.parse(readFileSync('src/data/projects.yaml', 'utf-8'));
 const featured = allProjects.filter((p: any) => p.featured);
 
 function getThumbnailUrl(project: any) {
+  if (project.thumbnail_url) return project.thumbnail_url;
   if (project.thumbnail_source === 'vimeo') return `https://vumbnail.com/${project.thumbnail_id}.jpg`;
   if (project.thumbnail_source === 'youtube') return `https://img.youtube.com/vi/${project.thumbnail_id}/hqdefault.jpg`;
   return '';
@@ -93,27 +94,35 @@ function getThumbnailUrl(project: any) {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 2rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    padding: 1.25rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
     z-index: 1;
+    overflow: hidden;
   }
   .featured__card-type {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--amber);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
   }
   .featured__card-title {
     font-family: var(--font-heading);
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(0.95rem, 1.8vw, 1.4rem);
     color: var(--white);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .featured__card-role {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--gray-lighter);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .featured__card-play {
     position: absolute;

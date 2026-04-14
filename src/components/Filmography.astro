@@ -14,6 +14,7 @@ const isTeaser = variant === 'teaser';
 const projects = isTeaser ? sorted.slice(0, 8) : sorted;
 
 function getThumbnailUrl(project: any) {
+  if (project.thumbnail_url) return project.thumbnail_url;
   if (project.thumbnail_source === 'vimeo') return `https://vumbnail.com/${project.thumbnail_id}.jpg`;
   if (project.thumbnail_source === 'youtube') return `https://img.youtube.com/vi/${project.thumbnail_id}/hqdefault.jpg`;
   return '';
@@ -222,6 +223,6 @@ function getThumbnailUrl(project: any) {
     text-transform: uppercase; color: var(--gray);
     padding: 2px 8px; border: 1px solid var(--gray-dark);
   }
-  .film-card__title { font-family: var(--font-heading); font-size: 1.15rem; color: var(--white); margin-bottom: 0.35rem; }
-  .film-card__role { font-size: 0.8rem; color: var(--gray-light); }
+  .film-card__title { font-family: var(--font-heading); font-size: 1.15rem; color: var(--white); margin-bottom: 0.35rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .film-card__role { font-size: 0.8rem; color: var(--gray-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 </style>
