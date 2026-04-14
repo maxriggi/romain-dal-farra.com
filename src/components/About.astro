@@ -24,9 +24,9 @@ const isTeaser = variant === 'teaser';
       </div>
 
       <div class="about__text reveal-right">
-        {showHeader && (
+        {showHeader && <span class="section__label">À propos</span>}
+        {showHeader && !isTeaser && (
           <>
-            <span class="section__label">À propos</span>
             <h2 class="section__heading">Romain Dal Farra</h2>
             <div class="section__divider"></div>
           </>

@@ -27,8 +27,12 @@ const iconPaths: Record<string, string> = {
     {showHeader && (
       <div class="reveal">
         <span class="section__label">Services</span>
-        <h2 class="section__heading">Ce que je propose</h2>
-        <div class="section__divider"></div>
+        {!isTeaser && (
+          <>
+            <h2 class="section__heading">Ce que je propose</h2>
+            <div class="section__divider"></div>
+          </>
+        )}
       </div>
     )}
 

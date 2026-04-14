@@ -23,10 +23,10 @@ function getThumbnailUrl(project: any) {
 <section class="filmography section" id="filmographie" aria-label="Filmographie">
   <div class="section__container">
     <div class="reveal">
-      {showHeader && (
+      {showHeader && <span class="section__label">Filmographie</span>}
+      {showHeader && !isTeaser && (
         <>
-          <span class="section__label">Filmographie</span>
-          <h2 class="section__heading">{isTeaser ? 'Projets récents' : 'Projets sélectionnés'}</h2>
+          <h2 class="section__heading">Projets sélectionnés</h2>
           <div class="section__divider"></div>
         </>
       )}
