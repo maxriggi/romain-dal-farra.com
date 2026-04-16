@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/logos/logo1.png';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
 
 const navLinks = [

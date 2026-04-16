@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://maxriggi.github.io',
-  base: '/romain-dal-farra.com',
+  site: 'https://romaindalfarra.com',
   output: 'static',
   image: {
     service: {

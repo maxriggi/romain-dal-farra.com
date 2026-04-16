@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/logos/logo8.png';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <section class="hero" id="hero" aria-label="Accueil">
@@ -13,7 +13,7 @@ const base = import.meta.env.BASE_URL;
       preload="auto"
       id="heroVideo"
     >
-      <source src={`${import.meta.env.BASE_URL}/videos/showreel.mp4`} type="video/mp4">
+      <source src={`${base}/videos/showreel.mp4`} type="video/mp4">
     </video>
   </div>
 
