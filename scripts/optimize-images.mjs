@@ -113,4 +113,13 @@ await processDirectory(join(RAW_ASSETS, 'Logo'), join(OUT, 'logos'), {
 console.log('\n🎬 DOP (assets/DOP/ → src/assets/dop/)');
 await processDirectory(join(RAW_ASSETS, 'DOP'), join(OUT, 'dop'), { maxWidth: 1200 });
 
+console.log('\n📷 Photos Divers – À propos');
+await processDirectory(join(RAW_ASSETS, 'Photos Divers : Autres réalisations', 'À propos'), join(OUT, 'portraits'), { maxWidth: 1600 });
+
+console.log('\n📷 Photos Divers – DOP');
+await processDirectory(join(RAW_ASSETS, 'Photos Divers : Autres réalisations', 'DOP'), join(OUT, 'dop'), { maxWidth: 1200 });
+
+console.log('\n📷 Photos Divers – Tournages');
+await processDirectory(join(RAW_ASSETS, 'Photos Divers : Autres réalisations', 'Tournages'), join(OUT, 'tournages'), { maxWidth: 1600 });
+
 console.log('\n✅ Optimisation terminée !');

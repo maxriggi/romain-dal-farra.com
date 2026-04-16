@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 import { readFileSync } from 'fs';
 import yaml from 'yaml';
-import aboutImg from '../assets/portraits/romain-dal-farra-realisateur-tournage.webp';
+import aboutImg from '../assets/portraits/cover-n-7-226.webp';
+import aboutImg2 from '../assets/portraits/img-3822.webp';
 
 interface Props {
   variant?: 'teaser' | 'full';
@@ -18,8 +19,15 @@ const isTeaser = variant === 'teaser';
   <div class="section__container">
     <div class="about__grid">
       <div class="wipe-reveal">
-        <div class="about__portrait">
-          <Image src={aboutImg} alt="Romain Dal Farra sur un tournage" class="about__portrait-img" width={600} height={800} loading="lazy" />
+        <div class="about__portraits">
+          <div class="about__portrait">
+            <Image src={aboutImg} alt="Romain Dal Farra — portrait" class="about__portrait-img" width={600} height={800} loading="lazy" />
+          </div>
+          {!isTeaser && (
+            <div class="about__portrait about__portrait--secondary">
+              <Image src={aboutImg2} alt="Romain Dal Farra sur un tournage" class="about__portrait-img" width={600} height={800} loading="lazy" />
+            </div>
+          )}
         </div>
       </div>
 
@@ -32,14 +40,19 @@ const isTeaser = variant === 'teaser';
           </>
         )}
 
-        <p>{aboutData.bio_intro}</p>
-
-        <blockquote class="about__quote">
-          « {aboutData.citation} »
-        </blockquote>
-
-        {!isTeaser && (
+        {isTeaser ? (
           <>
+            <p>Je développe une approche visuelle centrée sur la lumière, la composition et le rythme de l'image. Chaque projet est pour moi l'occasion de traduire des émotions en langage visuel, en construisant des cadres qui racontent autant qu'ils montrent. J'explore les contrastes, les textures et les mouvements pour donner du relief aux récits.</p>
+            <blockquote class="about__quote">
+              « La lumière ne montre pas seulement ce qui est visible, elle révèle ce que l'on ressent. »
+            </blockquote>
+          </>
+        ) : (
+          <>
+            <p>{aboutData.bio_intro}</p>
+            <blockquote class="about__quote">
+              « {aboutData.citation} »
+            </blockquote>
             <p>{aboutData.bio_parcours}</p>
             <p>{aboutData.bio_expertise}</p>
             <p>{aboutData.bio_transmission}</p>
@@ -62,11 +75,21 @@ const isTeaser = variant === 'teaser';
     gap: 4rem;
     align-items: center;
   }
+  .about__portraits {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
   .about__portrait {
     position: relative;
     aspect-ratio: 3 / 4;
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 72%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 72%);
+  }
+  .about__portrait--secondary {
+    aspect-ratio: 4 / 3;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 72%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 72%);
   }
   .about__portrait-img {
     position: absolute;

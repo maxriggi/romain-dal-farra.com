@@ -1,6 +1,15 @@
 ---
 import { readFileSync } from 'fs';
+import { Image } from 'astro:assets';
 import yaml from 'yaml';
+
+import bgRealisation from '../assets/dop/capture-d-ecran-2026-04-08-a-17.37.49.webp';
+import bgDop from '../assets/dop/capture-d-ecran-2026-04-08-a-17.56.10.webp';
+import bgPost from '../assets/dop/couleur-champion-scene-bar1580487381882.webp';
+import bgTech from '../assets/tournages/20230516-123432.webp';
+import bgAteliers from '../assets/tournages/20230610-102814.webp';
+import bgPhoto from '../assets/tournages/korben-cave.webp';
+import bgDrone from '../assets/tournages/abdtr-21.02-6.webp';
 
 interface Props {
   variant?: 'teaser' | 'full';
@@ -11,6 +20,16 @@ const { variant = 'full', showHeader = true } = Astro.props;
 const allServices = yaml.parse(readFileSync('src/data/services.yaml', 'utf-8'));
 const isTeaser = variant === 'teaser';
 const services = allServices;
+
+const serviceBgs: Record<string, ImageMetadata> = {
+  'realisation': bgRealisation,
+  'direction-photo': bgDop,
+  'post-production': bgPost,
+  'technicien-plateau': bgTech,
+  'ateliers-cinema': bgAteliers,
+  'photographie': bgPhoto,
+  'prise-de-vue-aerienne': bgDrone,
+};
 
 const iconPaths: Record<string, string> = {
   clapperboard: '<path d="M4 2l4 4H4zM8 2l4 4H8zM12 2l4 4h-4zM16 2l4 4h-4z"/><rect x="2" y="6" width="20" height="14" rx="2"/>',
@@ -40,10 +59,17 @@ const iconPaths: Record<string, string> = {
       <div class="services__carousel" id="servicesCarousel">
         {services.map((service: any, i: number) => (
           <article class={`service-card ${service.coming_soon ? 'service-card--soon' : ''}`} data-index={i}>
-            <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
-            <h3 class="service-card__title">{service.title}</h3>
-            <p class="service-card__desc">{service.description}</p>
-            {service.coming_soon && <span class="service-card__badge">Bientôt</span>}
+            {serviceBgs[service.id] && (
+              <div class="service-card__bg">
+                <Image src={serviceBgs[service.id]} alt="" width={400} height={300} class="service-card__bg-img" loading="lazy" />
+              </div>
+            )}
+            <div class="service-card__content">
+              <svg class="service-card__icon" viewBox="0 0 24 24" set:html={iconPaths[service.icon] || ''} />
+              <h3 class="service-card__title">{service.title}</h3>
+              <p class="service-card__desc">{service.description}</p>
+              {service.coming_soon && <span class="service-card__badge">Bientôt</span>}
+            </div>
           </article>
         ))}
       </div>
@@ -124,12 +150,32 @@ const iconPaths: Record<string, string> = {
     background: var(--black-card);
     border: 1px solid var(--gray-dark);
     border-radius: 12px;
-    padding: 2.5rem 2rem;
     scroll-snap-align: start;
     transition: border-color var(--duration-fast) var(--ease-smooth),
                 transform var(--duration-fast) var(--ease-smooth),
                 box-shadow var(--duration-fast) var(--ease-smooth);
     overflow: hidden;
+  }
+  .service-card__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .service-card__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.12;
+    filter: grayscale(1);
+    transition: opacity var(--duration-fast) var(--ease-smooth);
+  }
+  .service-card:hover .service-card__bg-img {
+    opacity: 0.2;
+  }
+  .service-card__content {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 2rem;
   }
   .service-card::before {
     content: '';

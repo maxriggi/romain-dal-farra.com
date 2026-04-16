@@ -5,14 +5,6 @@ import PageHero from '../components/PageHero.astro';
 import Skills from '../components/Skills.astro';
 import SectionCta from '../components/SectionCta.astro';
 import Footer from '../components/Footer.astro';
-
-const equipements = [
-  { category: 'Caméra', items: ['Sony FX6', 'Sony A7s III', 'Sony A7R V', 'Blackmagic URSA Mini Pro', 'PTZ Sony & Panasonic'] },
-  { category: 'Optiques', items: ['Sigma Art (série)', 'Sony GM (série)', 'Zeiss CP.3'] },
-  { category: 'Lumière', items: ['Astera Titan / Helios', 'Aputure 600d / 300d', 'Nanlite Forza', 'Projecteurs Fresnel', 'GrandMa3'] },
-  { category: 'Machinerie', items: ['Slider motorisé', 'Grue / Jib', 'Steadicam', 'Dolly', 'Grip & Rigging'] },
-  { category: 'Régie', items: ['Analog Way LiveCore', 'Blackmagic ATEM', 'Écrans LED', 'OBS Studio', 'Millumin5'] },
-];
 ---
 
 <BaseLayout
@@ -32,32 +24,6 @@ const equipements = [
 
   <div class="section-separator"></div>
 
-  <!-- Equipment section -->
-  <section class="equipment section">
-    <div class="section__container">
-      <div class="reveal">
-        <span class="section__label">Matériel</span>
-        <h2 class="section__heading">Équipements maîtrisés</h2>
-        <div class="section__divider"></div>
-      </div>
-
-      <div class="equipment__grid">
-        {equipements.map((cat) => (
-          <div class="equipment__category reveal">
-            <h3 class="equipment__cat-title">{cat.category}</h3>
-            <ul class="equipment__list">
-              {cat.items.map((item) => (
-                <li class="equipment__item">{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-separator"></div>
-
   <section class="cta-section section">
     <div class="section__container" style="text-align: center;">
       <p class="cta-section__text">Besoin d'un technicien expérimenté sur votre projet ?</p>
@@ -69,51 +35,6 @@ const equipements = [
 </BaseLayout>
 
 <style>
-  .equipment {
-    background:
-      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(74, 109, 140, 0.03) 0%, transparent 70%),
-      linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
-  }
-  .equipment__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  .equipment__category {
-    padding: 1.5rem;
-    background: var(--black-card);
-    border: 1px solid var(--gray-dark);
-    border-radius: 8px;
-    transition: border-color var(--duration-fast) var(--ease-smooth);
-  }
-  .equipment__category:hover {
-    border-color: var(--amber-dim);
-  }
-  .equipment__cat-title {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray-dark);
-  }
-  .equipment__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .equipment__item {
-    font-size: 0.85rem;
-    color: var(--gray-lighter);
-    padding: 0.35rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  }
-  .equipment__item:last-child {
-    border-bottom: none;
-  }
   .cta-section {
     background: transparent;
   }

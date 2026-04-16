@@ -1,28 +1,73 @@
 competences:
+  # Vidéo
   - name: Réalisation & Direction artistique
     level: 85
-  - name: Direction de la Photographie
-    level: 90
-  - name: Cadrage & Prise de vue caméra cinéma, broadcast, PTZ et hybride
-    level: 95
-  - name: Éclairage & Lumière événementiel, audiovisuel et cinématographique
-    level: 90
-  - name: Régie vidéo & Écrans LED
+    category: video
+  - name: Production
     level: 80
-  - name: Montage scène concerts et événementiel
+    category: video
+  - name: Écriture de scénario
     level: 75
-  - name: Post-Production & Étalonnage
-    level: 85
-  - name: Motion Design & Animation 2D
-    level: 75
-  - name: Pédagogie & Formation
-    level: 80
+    category: video
   - name: Création de vidéo par IA
     level: 70
+    category: video
+
+  # Lumière
+  - name: Direction de la Photographie
+    level: 90
+    category: lumiere
+  - name: Éclairage & Lumière
+    level: 90
+    category: lumiere
+
+  # Montage
+  - name: Post-Production & Étalonnage
+    level: 85
+    category: montage
+  - name: Motion Design & Animation 2D
+    level: 75
+    category: montage
+  - name: Postproduction
+    level: 80
+    category: montage
+
+  # Tournage
+  - name: Cadrage & Prise de vue
+    level: 95
+    category: tournage
   - name: Machinerie caméra
     level: 85
+    category: tournage
+  - name: Organisation de tournage
+    level: 80
+    category: tournage
   - name: Photographie
     level: 80
+    category: tournage
+
+  # Événementiel
+  - name: Régie vidéo & Écrans LED
+    level: 80
+    category: evenementiel
+  - name: Montage scène concerts et événementiel
+    level: 75
+    category: evenementiel
+  - name: Pédagogie & Formation
+    level: 80
+    category: evenementiel
+
+categories:
+  - id: video
+    label: Vidéo
+  - id: lumiere
+    label: Lumière
+  - id: montage
+    label: Montage
+  - id: tournage
+    label: Tournage
+  - id: evenementiel
+    label: Événementiel
 
 logiciels:
   - name: Final Cut Pro
@@ -45,8 +90,6 @@ logiciels:
     category: print
   - name: Blender
     category: 3d
-  - name: GrandMa3 Studio
-    category: lumiere
   - name: Millumin5
     category: lumiere
   - name: Bitfocus Companion
@@ -59,3 +102,65 @@ logiciels:
     category: led
   - name: Astera App
     category: lumiere
+
+equipements:
+  - category: Caméra
+    items:
+      - Alexa Arri mini LF
+      - RED KOMODO
+      - RED DRAGON
+      - FX9
+      - FX3
+      - FS7
+      - FS100
+      - Sony A7R III
+      - GH5
+      - C100
+      - C300
+      - BMPCC4K
+      - BMPCC6K PRO
+  - category: Optiques
+    items:
+      - DZO FILMS
+      - CANON CN-E
+      - SIRUI
+  - category: Lumière
+    items:
+      - Poursuite lumière
+      - Projecteur LED
+      - Projecteur HMI
+      - Projecteur Fresnel
+      - Robe
+      - Martin
+      - Arri L10-C
+      - Joker 800
+      - Chimera
+      - Toile
+      - Gélatines
+      - Diffusion
+      - Réflecteur
+  - category: Machinerie
+    items:
+      - Tête motorisée
+      - Slider manuel
+      - Steadycam et gimbal
+      - Sécurité plateau
+  - category: Régie
+    items:
+      - ATEM Télévision Studio
+      - ATEM Mini
+      - Tricaster
+      - ATEM Constellation 8K
+      - Ultimatte 12
+      - Hyperdeck
+      - Teranex
+      - Multiview
+      - Videohub
+      - Streamdeck
+      - Panasonic AWRP60 / AWRP150
+  - category: Vidéo
+    items:
+      - Installation et programmation écran LED
+      - Vidéo projecteur
+      - Télévision
+      - Support tactile

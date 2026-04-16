@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
+import InstagramBanner from '../components/InstagramBanner.astro';
 import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import { readFileSync } from 'fs';
@@ -27,14 +28,27 @@ function getCoverImage(slug: string, coverFile: string) {
   return allImages[key]?.default;
 }
 
-// Standalone images
+// Standalone images (Autres réalisations)
 const standaloneImages = Object.entries(allImages)
   .filter(([path]) => {
     const parts = path.split('/');
-    // Direct children of realisations/ (not in subdirs)
     return parts[parts.length - 2] === 'realisations';
   })
   .map(([path, mod]) => ({ path, image: mod.default }));
+
+// Collect a pool of images for the gallery viewer (covers + some from each gallery)
+const viewerImages: ImageMetadata[] = [];
+galleries.forEach((gallery: any) => {
+  const cover = getCoverImage(gallery.slug, gallery.cover);
+  if (cover) viewerImages.push(cover);
+  const imgs = getGalleryImages(gallery.slug);
+  if (imgs.length > 1) viewerImages.push(imgs[1].image);
+  if (imgs.length > 3) viewerImages.push(imgs[3].image);
+});
+// Add some standalone images
+standaloneImages.slice(0, 4).forEach(({ image }) => viewerImages.push(image));
+
+const picTimeUrl = 'https://dalfarraromainphotography.pic-time.com/portfolio';
 ---
 
 <BaseLayout
@@ -45,13 +59,30 @@ const standaloneImages = Object.entries(allImages)
 >
   <Nav />
 
+  <!-- Hero with gallery viewer -->
   <section class="photo-hero">
+    <div class="photo-hero__viewer" id="galleryViewer">
+      {viewerImages.map((img, i) => (
+        <div class={`photo-hero__slide ${i === 0 ? 'active' : ''}`}>
+          <Image src={img} alt={`Portfolio photo ${i + 1}`} width={1200} height={800} class="photo-hero__slide-img" loading={i === 0 ? 'eager' : 'lazy'} />
+        </div>
+      ))}
+    </div>
+    <div class="photo-hero__overlay"></div>
     <div class="photo-hero__content">
-      <span class="section__label">Photographie</span>
-      <h1 class="photo-hero__title">Portfolio Photo</h1>
+      <h1 class="photo-hero__title">Photographie</h1>
       <p class="photo-hero__subtitle">Reportages, portraits, événementiel — un regard cinématographique sur chaque instant.</p>
+      <a href={picTimeUrl} target="_blank" rel="noopener noreferrer" class="photo-hero__pictime btn-shutter">
+        Voir le portfolio Pic-time
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
   </section>
+
+  <!-- Instagram banner -->
+  <InstagramBanner />
+
+  <div class="section-separator"></div>
 
   <!-- Gallery grid -->
   <section class="galleries section">
@@ -113,7 +144,7 @@ const standaloneImages = Object.entries(allImages)
         </div>
         <div class="gallery__grid">
           {standaloneImages.map(({ image, path }: any, i: number) => (
-            <div class="gallery__item">
+            <div class="gallery__item" data-gallery="divers" data-index={i}>
               <Image src={image} alt={`Photo ${i + 1}`} width={600} height={400} class="gallery__img" loading="lazy" />
             </div>
           ))}
@@ -137,6 +168,20 @@ const standaloneImages = Object.entries(allImages)
 </BaseLayout>
 
 <script>
+  // Gallery viewer slideshow
+  (function() {
+    const slides = document.querySelectorAll('.photo-hero__slide');
+    if (slides.length < 2) return;
+    let current = 0;
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 3000);
+  })();
+
+  // Lightbox
   (function() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
@@ -166,7 +211,6 @@ const standaloneImages = Object.entries(allImages)
       const item = currentGallery[currentIndex];
       const img = item.querySelector('img');
       if (!img) return;
-      // Use the original src but request a larger size
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
       if (lightboxCounter) {
@@ -184,7 +228,6 @@ const standaloneImages = Object.entries(allImages)
       show();
     }
 
-    // Click on gallery items
     document.querySelectorAll('.gallery__item').forEach(item => {
       item.addEventListener('click', () => {
         const parent = item.closest('.gallery__grid');
@@ -213,29 +256,64 @@ const standaloneImages = Object.entries(allImages)
 </script>
 
 <style>
-  /* Hero */
+  /* Hero with gallery viewer */
   .photo-hero {
-    min-height: 50vh;
+    position: relative;
+    min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+  }
+  .photo-hero__viewer {
+    position: absolute;
+    inset: 0;
+  }
+  .photo-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+  .photo-hero__slide.active {
+    opacity: 1;
+  }
+  .photo-hero__slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0.3) 0%,
+      rgba(10, 10, 10, 0.6) 50%,
+      rgba(10, 10, 10, 0.85) 100%
+    );
+    z-index: 1;
+  }
+  .photo-hero__content {
+    position: relative;
+    z-index: 2;
     padding: 8rem 2rem 4rem;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,160,74,0.05) 0%, transparent 70%),
-      var(--black-deep);
   }
   .photo-hero__title {
     font-family: var(--font-heading);
     font-size: clamp(2.5rem, 6vw, 4rem);
-    color: var(--white);
+    color: var(--amber);
     margin-bottom: 1rem;
   }
   .photo-hero__subtitle {
     font-size: 1.05rem;
     color: var(--gray-lighter);
     max-width: 500px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+  }
+  .photo-hero__pictime {
+    display: inline-flex;
   }
 
   /* Gallery cards grid */

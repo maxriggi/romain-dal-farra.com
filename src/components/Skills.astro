@@ -11,49 +11,9 @@ const { variant = 'full', showHeader = true } = Astro.props;
 const isTeaser = variant === 'teaser';
 const data = yaml.parse(readFileSync('src/data/skills.yaml', 'utf-8'));
 const competences = data.competences;
+const categories = data.categories;
 const logiciels = data.logiciels;
-
-// Radar chart config
-const size = 300;
-const center = size / 2;
-const maxRadius = 120;
-const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
-const n = competences.length;
-
-function polarToCartesian(angle: number, radius: number) {
-  return {
-    x: center + radius * Math.cos(angle - Math.PI / 2),
-    y: center + radius * Math.sin(angle - Math.PI / 2),
-  };
-}
-
-// Grid polygons
-const gridPolygons = levels.map((level: number) => {
-  const points = [];
-  for (let i = 0; i < n; i++) {
-    const angle = (2 * Math.PI * i) / n;
-    const p = polarToCartesian(angle, maxRadius * level);
-    points.push(`${p.x},${p.y}`);
-  }
-  return points.join(' ');
-});
-
-// Data polygon
-const dataPoints = competences.map((c: any, i: number) => {
-  const angle = (2 * Math.PI * i) / n;
-  const p = polarToCartesian(angle, maxRadius * (c.level / 100));
-  return `${p.x},${p.y}`;
-}).join(' ');
-
-// Axis lines and labels
-const axes = competences.map((c: any, i: number) => {
-  const angle = (2 * Math.PI * i) / n;
-  const end = polarToCartesian(angle, maxRadius);
-  const labelPos = polarToCartesian(angle, maxRadius + 18);
-  // Shorten label for display
-  const shortName = c.name.split('&')[0].split(',')[0].trim();
-  return { x2: end.x, y2: end.y, labelX: labelPos.x, labelY: labelPos.y, name: shortName };
-});
+const equipements = data.equipements || [];
 ---
 
 <section class="skills section" id="competences" aria-label="Compétences et outils">
@@ -70,103 +30,85 @@ const axes = competences.map((c: any, i: number) => {
       </div>
     )}
 
-    <div class={isTeaser ? 'skills__grid skills__grid--teaser' : 'skills__grid'}>
-      <!-- Radar Chart -->
-      <div class="reveal-left">
-        {!isTeaser && <h3 class="skills__column-title">Compétences</h3>}
-        <div class="skills__radar-wrapper">
-          <svg viewBox={`0 0 ${size} ${size}`} class="skills__radar" id="radarChart" role="img" aria-label="Diagramme radar des compétences">
-            <!-- Grid -->
-            {gridPolygons.map((points: string) => (
-              <polygon points={points} fill="none" stroke="rgba(212,160,74,0.1)" stroke-width="0.5" />
-            ))}
-            <!-- Axes -->
-            {axes.map((axis: any) => (
-              <line x1={center} y1={center} x2={axis.x2} y2={axis.y2} stroke="rgba(212,160,74,0.08)" stroke-width="0.5" />
-            ))}
-            <!-- Data -->
-            <polygon points={dataPoints} fill="rgba(212,160,74,0.15)" stroke="var(--amber)" stroke-width="1.5" class="radar-data" />
-            <!-- Dots -->
-            {competences.map((c: any, i: number) => {
-              const angle = (2 * Math.PI * i) / n;
-              const p = polarToCartesian(angle, maxRadius * (c.level / 100));
-              return <circle cx={p.x} cy={p.y} r="3" fill="var(--amber)" class="radar-dot" />;
-            })}
-            <!-- Labels -->
-            {axes.map((axis: any) => (
-              <text x={axis.labelX} y={axis.labelY} text-anchor="middle" dominant-baseline="central"
-                    fill="var(--gray-lighter)" font-size="6" font-family="var(--font-mono)">
-                {axis.name}
-              </text>
-            ))}
-          </svg>
-        </div>
+    <!-- Word Cloud -->
+    <div class="skills__cloud reveal" id="skillsCloud">
+      {categories.map((cat: any) => {
+        const catSkills = competences.filter((c: any) => c.category === cat.id);
+        return (
+          <div class="cloud__group">
+            <span class="cloud__category">{cat.label}</span>
+            <div class="cloud__tags">
+              {catSkills.map((skill: any) => {
+                const sizeClass = skill.level >= 90 ? 'cloud__tag--xl' : skill.level >= 80 ? 'cloud__tag--lg' : 'cloud__tag--md';
+                return (
+                  <span class={`cloud__tag ${sizeClass}`} data-level={skill.level}>
+                    {skill.name}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
 
-        <div class="skills__bars">
-          {competences.map((c: any) => (
-            <div class="skill-item">
-              <div class="skill-item__header">
-                <span class="skill-item__name">{c.name}</span>
-              </div>
-              <div class="skill-item__bar">
-                <div class="skill-item__fill" style={`--skill-width: ${c.level}%`} data-width={c.level}></div>
+    <!-- Logiciels -->
+    <div class="skills__tools reveal">
+      {!isTeaser && <h3 class="skills__column-title">Logiciels & Outils</h3>}
+      <div class="tools-grid" id="toolsGrid">
+        {logiciels.map((tool: any) => (
+          <div class="tool-pill">
+            <svg class="tool-pill__icon" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            {tool.name}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Equipment list - full page only */}
+    {!isTeaser && equipements.length > 0 && (
+      <div class="skills__equipment reveal">
+        <h3 class="skills__column-title">Équipements maîtrisés</h3>
+        <div class="equipment__grid">
+          {equipements.map((group: any) => (
+            <div class="equipment__category">
+              <h4 class="equipment__cat-title">{group.category}</h4>
+              <div class="equipment__items">
+                {group.items.map((item: string) => (
+                  <span class="equipment__item">{item}</span>
+                ))}
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {!isTeaser && (
-        <div class="reveal-right">
-          <h3 class="skills__column-title">Logiciels & Outils</h3>
-          <div class="tools-grid stagger-children" id="toolsGrid">
-            {logiciels.map((tool: any) => (
-              <div class="tool-pill">
-                <svg class="tool-pill__icon" viewBox="0 0 24 24">
-                  <rect x="2" y="3" width="20" height="14" rx="2"/>
-                  <line x1="8" y1="21" x2="16" y2="21"/>
-                  <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-                {tool.name}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    )}
   </div>
 </section>
 
 <script>
   (function() {
-    const radar = document.getElementById('radarChart');
-    if (!radar) return;
-    const dataPolygon = radar.querySelector('.radar-data') as SVGPolygonElement;
-    const dots = radar.querySelectorAll('.radar-dot');
-    if (!dataPolygon) return;
-
-    // Store original points
-    const originalPoints = dataPolygon.getAttribute('points') || '';
-    const cx = 150, cy = 150;
-    const centerPoints = originalPoints.split(' ').map(() => `${cx},${cy}`).join(' ');
-
-    // Start from center
-    dataPolygon.setAttribute('points', centerPoints);
-    dots.forEach(d => { (d as SVGCircleElement).style.opacity = '0'; });
+    const cloud = document.getElementById('skillsCloud');
+    if (!cloud) return;
+    const tags = cloud.querySelectorAll('.cloud__tag');
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          dataPolygon.style.transition = 'all 1.5s cubic-bezier(0.22, 1, 0.36, 1)';
-          dataPolygon.setAttribute('points', originalPoints);
-          dots.forEach((d, i) => {
-            setTimeout(() => { (d as SVGCircleElement).style.opacity = '1'; (d as SVGCircleElement).style.transition = 'opacity 0.3s'; }, i * 80);
+          tags.forEach((tag, i) => {
+            setTimeout(() => {
+              (tag as HTMLElement).classList.add('in-view');
+            }, i * 60);
           });
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.3 });
-    observer.observe(radar);
+    }, { threshold: 0.2 });
+    observer.observe(cloud);
   })();
 </script>
 
@@ -177,41 +119,112 @@ const axes = competences.map((c: any, i: number) => {
       radial-gradient(ellipse 50% 40% at 10% 30%, rgba(74, 109, 140, 0.03) 0%, transparent 70%),
       linear-gradient(180deg, var(--black-deep) 0%, #0e0e0f 35%, #100f0e 65%, var(--black-deep) 100%);
   }
-  .skills__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+
+  /* Word Cloud */
+  .skills__cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
   }
+
+  .cloud__group {
+    text-align: center;
+  }
+
+  .cloud__category {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .cloud__tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 320px;
+  }
+
+  .cloud__tag {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--gray-dark);
+    color: var(--gray-lighter);
+    background: var(--black-card);
+    font-family: var(--font-body);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(15px) scale(0.9);
+    transition: opacity 0.5s var(--ease-cinematic),
+                transform 0.5s var(--ease-cinematic),
+                border-color var(--duration-fast) var(--ease-smooth),
+                color var(--duration-fast) var(--ease-smooth),
+                background var(--duration-fast) var(--ease-smooth);
+  }
+
+  .cloud__tag.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .cloud__tag:hover {
+    border-color: var(--amber);
+    color: var(--amber-light);
+    background: rgba(212, 160, 74, 0.08);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .cloud__tag--xl {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    color: var(--white);
+    border-color: var(--amber-dim);
+  }
+
+  .cloud__tag--lg {
+    font-size: 0.88rem;
+    padding: 0.45rem 1.1rem;
+  }
+
+  .cloud__tag--md {
+    font-size: 0.78rem;
+    color: var(--gray-light);
+  }
+
+  /* Tools */
+  .skills__tools {
+    margin-bottom: 3rem;
+  }
+
   .skills__column-title {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--amber);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--gray-dark);
   }
-  .skills__radar-wrapper {
-    max-width: 400px;
-    margin: 0 auto 2rem;
+
+  .tools-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
-  .skills__radar { width: 100%; height: auto; }
-  .skills__bars { margin-top: 1rem; }
-  .skill-item { margin-bottom: 1.75rem; }
-  .skill-item__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-  .skill-item__name { font-size: 0.85rem; color: var(--gray-lighter); }
-  .skill-item__bar { height: 2px; background: var(--gray-dark); position: relative; overflow: hidden; }
-  .skill-item__fill {
-    position: absolute; top: 0; left: 0; height: 100%;
-    background: linear-gradient(90deg, var(--amber-dim), var(--amber));
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 1.5s var(--ease-cinematic);
-  }
-  .skill-item__fill.in-view { transform: scaleX(1); }
-  .tools-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
   .tool-pill {
-    display: flex; align-items: center; gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.6rem 1.2rem;
     background: var(--black-card);
     border: 1px solid var(--gray-dark);
@@ -221,16 +234,72 @@ const axes = competences.map((c: any, i: number) => {
                 color var(--duration-fast) var(--ease-smooth),
                 transform var(--duration-fast) var(--ease-smooth);
   }
-  .tool-pill:hover { border-color: var(--amber-dim); color: var(--amber-light); transform: translateY(-2px); }
-  .tool-pill__icon { width: 16px; height: 16px; stroke: var(--amber-dim); fill: none; stroke-width: 1.5; }
 
-  .skills__grid--teaser {
-    grid-template-columns: 1fr;
-    max-width: 500px;
-    margin: 0 auto;
+  .tool-pill:hover {
+    border-color: var(--amber-dim);
+    color: var(--amber-light);
+    transform: translateY(-2px);
+  }
+
+  .tool-pill__icon {
+    width: 16px;
+    height: 16px;
+    stroke: var(--amber-dim);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  /* Equipment */
+  .skills__equipment {
+    margin-top: 1rem;
+  }
+
+  .equipment__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .equipment__category {
+    background: var(--black-card);
+    border: 1px solid var(--gray-dark);
+    padding: 1.5rem;
+  }
+
+  .equipment__cat-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-dark);
+  }
+
+  .equipment__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .equipment__item {
+    font-size: 0.78rem;
+    color: var(--gray-lighter);
+    padding: 0.25rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
   }
 
   @media (max-width: 768px) {
-    .skills__grid { grid-template-columns: 1fr; gap: 3rem; }
+    .skills__cloud {
+      gap: 1.5rem;
+    }
+    .cloud__tags {
+      max-width: 100%;
+    }
+    .equipment__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
