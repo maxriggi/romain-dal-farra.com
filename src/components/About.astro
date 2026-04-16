@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import yaml from 'yaml';
 import aboutImg from '../assets/portraits/cover-n-7-226.webp';
 import aboutImg2 from '../assets/portraits/img-3822.webp';
+import aboutImgTeaser from '../assets/portraits/romain-dal-farra-realisateur-tournage.webp';
 
 interface Props {
   variant?: 'teaser' | 'full';
@@ -21,7 +22,7 @@ const isTeaser = variant === 'teaser';
       <div class="wipe-reveal">
         <div class="about__portraits">
           <div class="about__portrait">
-            <Image src={aboutImg} alt="Romain Dal Farra — portrait" class="about__portrait-img" width={600} height={800} loading="lazy" />
+            <Image src={isTeaser ? aboutImgTeaser : aboutImg} alt="Romain Dal Farra — portrait" class="about__portrait-img" width={600} height={800} loading="lazy" />
           </div>
           {!isTeaser && (
             <div class="about__portrait about__portrait--secondary">
