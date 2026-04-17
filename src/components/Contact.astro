@@ -48,6 +48,7 @@ const { showHeader = true } = Astro.props;
 
       <div class="reveal-right">
         <form class="contact__form" id="contactForm" action="https://formspree.io/f/xqewqzre" method="POST">
+          <input type="hidden" name="_next" value={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/merci`} />
           <div class="form-group">
             <label class="form-group__label" for="contactName">Nom</label>
             <input class="form-group__input" type="text" id="contactName" name="name" placeholder="Votre nom" required>
