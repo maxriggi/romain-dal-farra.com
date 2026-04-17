@@ -198,17 +198,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       });
     });
 
-    // Option selection highlight
+    // Option selection highlight — use setTimeout to read state after browser toggle
     document.querySelectorAll('.devis-option').forEach(opt => {
       opt.addEventListener('click', () => {
-        const input = opt.querySelector('input');
+        const input = opt.querySelector('input') as HTMLInputElement;
         if (!input) return;
-        if (input.type === 'radio') {
-          opt.closest('.devis-step__options')?.querySelectorAll('.devis-option').forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-        } else {
-          opt.classList.toggle('selected');
-        }
+        setTimeout(() => {
+          if (input.type === 'radio') {
+            opt.closest('.devis-step__options')?.querySelectorAll('.devis-option').forEach(o => o.classList.remove('selected'));
+            if (input.checked) opt.classList.add('selected');
+          } else {
+            opt.classList.toggle('selected', input.checked);
+          }
+        }, 0);
       });
     });
 
