@@ -1186,15 +1186,7 @@ a.film-card {
   pointer-events: none;
 }
 .btn-shutter svg {
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  transition: transform var(--duration-fast) var(--ease-smooth);
-}
-.btn-shutter:hover svg {
-  transform: translateX(4px);
+  display: none;
 }
 
 @media (max-width: 768px) {

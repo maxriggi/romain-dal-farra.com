@@ -31,6 +31,7 @@ const navLinks = [
         <li><a href={fullHref} class={`nav__link${isActive ? ' nav__link--active' : ''}`}>{label}</a></li>
       );
     })}
+    <li><a href={`${base}/devis`} class="nav__cta">Demander un devis</a></li>
   </ul>
 </nav>
 
@@ -123,6 +124,22 @@ const navLinks = [
   .nav__link:hover::after { width: 100%; }
   .nav__link--active { color: var(--amber); }
   .nav__link--active::after { width: 100%; }
+  .nav__cta {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--white);
+    border-radius: 4px;
+    background: var(--white);
+    color: var(--black-deep);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all var(--duration-fast) var(--ease-smooth);
+  }
+  .nav__cta:hover {
+    background: transparent;
+    color: var(--white);
+  }
   .nav__toggle {
     display: none;
     flex-direction: column;
