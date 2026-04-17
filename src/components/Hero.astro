@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/logos/logo8.png';
+import logo from '../assets/logos/logo-home.png';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -51,7 +51,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <div class="hero__separator" id="heroSeparator"></div>
 
-    <p class="hero__subtitle" id="heroSubtitle">Création audiovisuelle — Post production — Technicien plateau</p>
+    <p class="hero__subtitle" id="heroSubtitle">
+      <span class="hero__service">Création audiovisuelle</span> — <span class="hero__service">Post production</span> — <span class="hero__service">Technicien plateau</span>
+    </p>
 
     <div class="hero__ctas">
       <a href={`${base}/filmographie`} class="btn-shutter">
@@ -243,7 +245,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     animation: heroLogoReveal 1.5s var(--ease-cinematic) 1.4s forwards;
   }
   .hero__logo {
-    width: clamp(160px, 25vw, 280px);
+    width: clamp(280px, 40vw, 500px);
     height: auto;
     filter: drop-shadow(0 4px 30px rgba(212, 160, 74, 0.15));
   }
@@ -268,6 +270,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .hero__subtitle.revealed {
     opacity: 1; transform: translateY(0);
     transition: opacity 1s var(--ease-cinematic) 3.3s, transform 1s var(--ease-cinematic) 3.3s;
+  }
+  .hero__service {
+    transition: color var(--duration-fast) var(--ease-smooth),
+                text-shadow var(--duration-fast) var(--ease-smooth);
+    cursor: default;
+  }
+  .hero__service:hover {
+    color: var(--amber);
+    text-shadow: 0 0 20px rgba(212, 160, 74, 0.4);
   }
 
   .hero__ctas {

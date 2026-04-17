@@ -11,7 +11,7 @@ const { variant = 'full', showHeader = true } = Astro.props;
 const allProjects = yaml.parse(readFileSync('src/data/projects.yaml', 'utf-8'));
 const sorted = allProjects.sort((a: any, b: any) => b.year - a.year);
 const isTeaser = variant === 'teaser';
-const projects = isTeaser ? sorted.slice(0, 8) : sorted;
+const projects = isTeaser ? sorted.slice(0, 9) : sorted;
 
 function getThumbnailUrl(project: any) {
   if (project.thumbnail_url) return project.thumbnail_url;
