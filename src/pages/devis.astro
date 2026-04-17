@@ -252,7 +252,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
         // Redirect after 8 seconds
         setTimeout(() => {
-          const base = document.querySelector('meta[name="base"]')?.getAttribute('content') || '';
+          const path = window.location.pathname;
+          const base = path.substring(0, path.lastIndexOf('/devis'));
           window.location.href = base + '/';
         }, 8000);
       });
