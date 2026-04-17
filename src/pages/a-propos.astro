@@ -41,22 +41,18 @@ const parcours = [
   <!-- Parcours timeline -->
   <section class="timeline section">
     <div class="section__container">
-      <div class="reveal">
-        <span class="section__label">Parcours</span>
-        <h2 class="section__heading">Mon chemin</h2>
-        <div class="section__divider"></div>
-      </div>
-
       <div class="timeline__wrapper">
         <div class="timeline__track" id="timelineTrack">
           <div class="timeline__line">
             <div class="timeline__line-fill" id="timelineFill"></div>
           </div>
           {parcours.map((item, i) => (
-            <div class="timeline__item" data-index={i}>
+            <div class={`timeline__item ${i % 2 === 0 ? 'timeline__item--top' : 'timeline__item--bottom'}`} data-index={i}>
               <div class="timeline__dot"></div>
-              <span class="timeline__year">{item.year}</span>
-              <p class="timeline__label">{item.label}</p>
+              <div class="timeline__content">
+                <span class="timeline__year">{item.year}</span>
+                <p class="timeline__label">{item.label}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -130,28 +126,29 @@ const parcours = [
     background: linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
   }
   .timeline__wrapper {
-    margin-top: 3rem;
+    margin-top: 2rem;
     overflow-x: auto;
     overflow-y: visible;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-bottom: 1rem;
   }
   .timeline__wrapper::-webkit-scrollbar { display: none; }
   .timeline__track {
     display: flex;
     position: relative;
     min-width: max-content;
-    padding: 3rem 0 1rem;
+    height: 280px;
+    align-items: center;
     gap: 0;
   }
   .timeline__line {
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 0;
     right: 0;
     height: 2px;
     background: var(--gray-dark);
+    transform: translateY(-50%);
   }
   .timeline__line-fill {
     height: 100%;
@@ -161,14 +158,39 @@ const parcours = [
   }
   .timeline__item {
     position: relative;
-    flex: 0 0 clamp(140px, 16vw, 200px);
+    flex: 0 0 clamp(150px, 16vw, 200px);
     text-align: center;
-    padding: 2rem 1rem 0;
     cursor: default;
     opacity: 0;
-    transform: translateY(15px);
     transition: opacity 0.6s var(--ease-cinematic),
                 transform 0.6s var(--ease-cinematic);
+  }
+  /* Quinconce : pairs en haut, impairs en bas */
+  .timeline__item--top {
+    align-self: flex-start;
+    padding-top: 0;
+    padding-bottom: 2rem;
+    transform: translateY(-10px);
+  }
+  .timeline__item--top .timeline__content {
+    padding-bottom: 1.5rem;
+  }
+  .timeline__item--top .timeline__dot {
+    bottom: -7px;
+    top: auto;
+  }
+  .timeline__item--bottom {
+    align-self: flex-end;
+    padding-bottom: 0;
+    padding-top: 2rem;
+    transform: translateY(10px);
+  }
+  .timeline__item--bottom .timeline__content {
+    padding-top: 1.5rem;
+  }
+  .timeline__item--bottom .timeline__dot {
+    top: -7px;
+    bottom: auto;
   }
   .timeline__item.active {
     opacity: 1;
@@ -176,7 +198,6 @@ const parcours = [
   }
   .timeline__dot {
     position: absolute;
-    top: -0.45rem;
     left: 50%;
     transform: translateX(-50%) scale(1);
     width: 14px;
@@ -202,7 +223,7 @@ const parcours = [
     font-size: 0.75rem;
     letter-spacing: 0.15em;
     color: var(--gray);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
     transition: color 0.3s var(--ease-smooth);
   }
   .timeline__item.active .timeline__year {
@@ -237,6 +258,9 @@ const parcours = [
   @media (max-width: 768px) {
     .timeline__item {
       flex: 0 0 150px;
+    }
+    .timeline__track {
+      height: 240px;
     }
   }
 </style>
