@@ -47,14 +47,19 @@ const parcours = [
         <div class="section__divider"></div>
       </div>
 
-      <div class="timeline__track">
-        {parcours.map((item, i) => (
-          <div class="timeline__item reveal">
-            <span class="timeline__year">{item.year}</span>
-            <div class="timeline__dot"></div>
-            <p class="timeline__label">{item.label}</p>
+      <div class="timeline__wrapper">
+        <div class="timeline__track" id="timelineTrack">
+          <div class="timeline__line">
+            <div class="timeline__line-fill" id="timelineFill"></div>
           </div>
-        ))}
+          {parcours.map((item, i) => (
+            <div class="timeline__item" data-index={i}>
+              <div class="timeline__dot"></div>
+              <span class="timeline__year">{item.year}</span>
+              <p class="timeline__label">{item.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div class="timeline__cta reveal">
@@ -82,44 +87,135 @@ const parcours = [
   <Footer />
 </BaseLayout>
 
+<script>
+  (function() {
+    const track = document.getElementById('timelineTrack');
+    const fill = document.getElementById('timelineFill');
+    const items = track?.querySelectorAll('.timeline__item');
+    if (!track || !fill || !items?.length) return;
+
+    // Activate items on scroll into view
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const item = entry.target as HTMLElement;
+          item.classList.add('active');
+          // Update fill line to reach this item
+          const trackRect = track.getBoundingClientRect();
+          const itemRect = item.getBoundingClientRect();
+          const progress = (itemRect.left + itemRect.offsetWidth / 2 - trackRect.left) / trackRect.scrollWidth * 100;
+          fill.style.width = Math.min(progress, 100) + '%';
+          observer.unobserve(item);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    items.forEach(item => observer.observe(item));
+
+    // Hover interaction
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        items.forEach(i => i.classList.remove('hover'));
+        item.classList.add('hover');
+      });
+      item.addEventListener('mouseleave', () => {
+        item.classList.remove('hover');
+      });
+    });
+  })();
+</script>
+
 <style>
   .timeline {
     background: linear-gradient(180deg, var(--black-deep) 0%, #0f0f0f 50%, var(--black-deep) 100%);
   }
+  .timeline__wrapper {
+    margin-top: 3rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding-bottom: 1rem;
+  }
+  .timeline__wrapper::-webkit-scrollbar { display: none; }
   .timeline__track {
-    position: relative;
     display: flex;
-    flex-direction: column;
+    position: relative;
+    min-width: max-content;
+    padding: 3rem 0 1rem;
     gap: 0;
-    padding-left: 2rem;
-    border-left: 1px solid var(--gray-dark);
-    margin-top: 2rem;
+  }
+  .timeline__line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gray-dark);
+  }
+  .timeline__line-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+    transition: width 1s var(--ease-cinematic);
   }
   .timeline__item {
     position: relative;
-    padding: 1.5rem 0 1.5rem 2rem;
+    flex: 0 0 clamp(140px, 16vw, 200px);
+    text-align: center;
+    padding: 2rem 1rem 0;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.6s var(--ease-cinematic),
+                transform 0.6s var(--ease-cinematic);
+  }
+  .timeline__item.active {
+    opacity: 1;
+    transform: translateY(0);
   }
   .timeline__dot {
     position: absolute;
-    left: -2.55rem;
-    top: 1.85rem;
-    width: 10px;
-    height: 10px;
-    background: var(--amber);
+    top: -0.45rem;
+    left: 50%;
+    transform: translateX(-50%) scale(1);
+    width: 14px;
+    height: 14px;
+    background: var(--black-deep);
+    border: 2px solid var(--gray-dark);
     border-radius: 50%;
-    border: 2px solid var(--black-deep);
+    transition: all 0.4s var(--ease-cinematic);
+    z-index: 1;
+  }
+  .timeline__item.active .timeline__dot {
+    border-color: var(--amber);
+    background: var(--amber);
+    box-shadow: 0 0 12px rgba(212, 160, 74, 0.4);
+  }
+  .timeline__item.hover .timeline__dot {
+    transform: translateX(-50%) scale(1.4);
+    box-shadow: 0 0 20px rgba(212, 160, 74, 0.6);
   }
   .timeline__year {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.15em;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s var(--ease-smooth);
+  }
+  .timeline__item.active .timeline__year {
     color: var(--amber);
-    text-transform: uppercase;
   }
   .timeline__label {
-    font-size: 0.95rem;
-    color: var(--gray-lighter);
-    margin-top: 0.25rem;
+    font-size: 0.82rem;
+    color: var(--gray-light);
+    line-height: 1.5;
+    transition: color 0.3s var(--ease-smooth);
+  }
+  .timeline__item.hover .timeline__label {
+    color: var(--white);
   }
   .timeline__cta {
     margin-top: 3rem;
@@ -139,14 +235,8 @@ const parcours = [
   }
 
   @media (max-width: 768px) {
-    .timeline__track {
-      padding-left: 1.5rem;
-    }
     .timeline__item {
-      padding-left: 1.5rem;
-    }
-    .timeline__dot {
-      left: -2.05rem;
+      flex: 0 0 150px;
     }
   }
 </style>
