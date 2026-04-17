@@ -5,6 +5,19 @@ import PageHero from '../components/PageHero.astro';
 import Filmography from '../components/Filmography.astro';
 import SectionCta from '../components/SectionCta.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+
+// Standalone images (Autres réalisations) — same logic as photographie page
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/realisations/**/*.webp',
+  { eager: true }
+);
+const standaloneImages = Object.entries(allImages)
+  .filter(([path]) => {
+    const parts = path.split('/');
+    return parts[parts.length - 2] === 'realisations';
+  })
+  .map(([path, mod]) => ({ path, image: mod.default }));
 ---
 
 <BaseLayout
@@ -22,6 +35,28 @@ import Footer from '../components/Footer.astro';
 
   <Filmography variant="full" showHeader={false} />
 
+  {standaloneImages.length > 0 && (
+    <>
+      <div class="section-separator"></div>
+      <section class="gallery section" id="gallery-divers">
+        <div class="section__container">
+          <div class="reveal">
+            <span class="section__label">Divers</span>
+            <h2 class="section__heading">Autres réalisations</h2>
+            <div class="section__divider"></div>
+          </div>
+          <div class="gallery__grid">
+            {standaloneImages.map(({ image, path }: any, i: number) => (
+              <div class="gallery__item" data-index={i}>
+                <Image src={image} alt={`Autre réalisation ${i + 1}`} width={600} height={400} class="gallery__img" loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+
   <div class="section-separator"></div>
 
   <section class="cta-section section">
@@ -35,6 +70,30 @@ import Footer from '../components/Footer.astro';
 </BaseLayout>
 
 <style>
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.5rem;
+  }
+  .gallery__item {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-smooth), filter 0.3s;
+  }
+  .gallery__item:hover .gallery__img {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+  @media (max-width: 768px) {
+    .gallery__grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
   .cta-section {
     background: transparent;
   }
