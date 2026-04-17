@@ -57,6 +57,10 @@ const { showHeader = true } = Astro.props;
             <input class="form-group__input" type="email" id="contactEmail" name="email" placeholder="votre@email.com" required>
           </div>
           <div class="form-group">
+            <label class="form-group__label" for="contactPhone">Téléphone</label>
+            <input class="form-group__input" type="tel" id="contactPhone" name="phone" placeholder="06 XX XX XX XX">
+          </div>
+          <div class="form-group">
             <label class="form-group__label" for="contactSubject">Sujet</label>
             <input class="form-group__input" type="text" id="contactSubject" name="subject" placeholder="Sujet de votre message">
           </div>
