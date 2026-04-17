@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import logo from '../assets/logos/logo-home.png';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -46,7 +44,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <p class="hero__subtitle-top" id="heroSubtitleTop">Réalisateur et directeur de la photographie</p>
 
     <h1 class="hero__title">
-      <Image src={logo} alt="Romain Dal Farra — RD." class="hero__logo" width={280} height={280} />
+      <img src={`${base}/logo-home.png`} alt="Romain Dal Farra — RD." class="hero__logo" />
     </h1>
 
     <div class="hero__separator" id="heroSeparator"></div>
