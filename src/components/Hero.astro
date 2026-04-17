@@ -243,8 +243,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     animation: heroLogoReveal 1.5s var(--ease-cinematic) 1.4s forwards;
   }
   .hero__logo {
-    width: clamp(320px, 60vw, 800px);
+    width: clamp(260px, 48vw, 640px);
     height: auto;
+    padding: 0.5rem 0;
     filter: drop-shadow(0 4px 30px rgba(212, 160, 74, 0.15));
   }
   @keyframes heroLogoReveal {
