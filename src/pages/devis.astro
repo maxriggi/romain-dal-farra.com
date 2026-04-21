@@ -24,7 +24,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </button>
       <p class="devis-hero__time">
         <svg viewBox="0 0 24 24" class="devis-hero__clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Cela prend 1 minute
+        Cela prend 2 minutes
       </p>
     </div>
   </section>
@@ -37,7 +37,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Step 1 -->
     <div class="devis-step active" data-step="1">
-      <span class="devis-step__num">1 → 7</span>
+      <span class="devis-step__num">1 → 8</span>
       <h2 class="devis-step__title">Quel est votre objectif principal ?</h2>
       <p class="devis-step__hint">Choisissez-en autant que vous voulez</p>
       <div class="devis-step__options devis-step__options--multi" data-name="objectif">
@@ -58,7 +58,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Step 2 -->
     <div class="devis-step" data-step="2">
-      <span class="devis-step__num">2 → 7</span>
+      <span class="devis-step__num">2 → 8</span>
       <h2 class="devis-step__title">Où en êtes-vous dans votre projet ?</h2>
       <div class="devis-step__options devis-step__options--single" data-name="avancement">
         <label class="devis-option"><input type="radio" name="avancement" value="J'ai déjà un brief ou une idée claire"><span>A</span> J'ai déjà un brief ou une idée claire</label>
@@ -70,9 +70,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Step 3 -->
     <div class="devis-step" data-step="3">
-      <span class="devis-step__num">3 → 7</span>
+      <span class="devis-step__num">3 → 8</span>
       <h2 class="devis-step__title">Quel est votre budget ?</h2>
-      <p class="devis-step__hint">As-tu une fourchette budgétaire en tête ?</p>
+      <p class="devis-step__hint">Avez-vous une fourchette budgétaire en tête ?</p>
       <div class="devis-step__options devis-step__options--single" data-name="budget">
         <label class="devis-option"><input type="radio" name="budget" value="Moins de 2 000 €"><span>A</span> Moins de 2 000 €</label>
         <label class="devis-option"><input type="radio" name="budget" value="2 000 € - 5 000 €"><span>B</span> 2 000 € - 5 000 €</label>
@@ -85,7 +85,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Step 4 -->
     <div class="devis-step" data-step="4">
-      <span class="devis-step__num">4 → 7</span>
+      <span class="devis-step__num">4 → 8</span>
       <h2 class="devis-step__title">Où seront diffusées les vidéos ?</h2>
       <p class="devis-step__hint">Choisissez-en autant que vous voulez</p>
       <div class="devis-step__options devis-step__options--multi" data-name="diffusion">
@@ -100,34 +100,45 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <button class="devis-step__ok" data-next="5">Ok</button>
     </div>
 
-    <!-- Step 5 -->
+    <!-- Step 5 - Projet libre -->
     <div class="devis-step" data-step="5">
-      <span class="devis-step__num">5 → 7</span>
-      <h2 class="devis-step__title">Voulez-vous partager un lien utile ?</h2>
-      <p class="devis-step__hint">(site web, Insta, vidéo de référence)</p>
+      <span class="devis-step__num">5 → 8</span>
+      <h2 class="devis-step__title">Parlez-nous de votre projet</h2>
+      <p class="devis-step__hint">Contexte, objectifs, public cible, contraintes — tout ce qui nous aidera à mieux vous orienter.</p>
       <div class="devis-step__input-wrap">
-        <input type="url" name="lien" class="devis-step__input" placeholder="https://..." />
+        <textarea name="projet" class="devis-step__input devis-step__input--textarea" rows="6" placeholder="Décrivez votre projet en quelques lignes..."></textarea>
       </div>
       <button class="devis-step__ok" data-next="6">Ok</button>
     </div>
 
     <!-- Step 6 -->
     <div class="devis-step" data-step="6">
-      <span class="devis-step__num">6 → 7</span>
+      <span class="devis-step__num">6 → 8</span>
+      <h2 class="devis-step__title">Voulez-vous partager un lien utile ?</h2>
+      <p class="devis-step__hint">(site web, Insta, vidéo de référence)</p>
+      <div class="devis-step__input-wrap">
+        <input type="url" name="lien" class="devis-step__input" placeholder="https://..." />
+      </div>
+      <button class="devis-step__ok" data-next="7">Ok</button>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="devis-step" data-step="7">
+      <span class="devis-step__num">7 → 8</span>
       <h2 class="devis-step__title">Quelle est votre date de lancement ?</h2>
-      <p class="devis-step__hint">Tu veux lancer ça quand ?</p>
+      <p class="devis-step__hint">Quand souhaitez-vous lancer le projet ?</p>
       <div class="devis-step__options devis-step__options--single" data-name="delai">
         <label class="devis-option"><input type="radio" name="delai" value="Immédiatement"><span>A</span> Immédiatement</label>
         <label class="devis-option"><input type="radio" name="delai" value="Ce mois-ci"><span>B</span> Ce mois-ci</label>
         <label class="devis-option"><input type="radio" name="delai" value="D'ici 2 à 3 mois"><span>C</span> D'ici 2 à 3 mois</label>
         <label class="devis-option"><input type="radio" name="delai" value="Je ne sais pas encore"><span>D</span> Je ne sais pas encore</label>
       </div>
-      <button class="devis-step__ok" data-next="7">Ok</button>
+      <button class="devis-step__ok" data-next="8">Ok</button>
     </div>
 
-    <!-- Step 7 - Contact info -->
-    <div class="devis-step" data-step="7">
-      <span class="devis-step__num">7 → 7</span>
+    <!-- Step 8 - Contact info -->
+    <div class="devis-step" data-step="8">
+      <span class="devis-step__num">8 → 8</span>
       <h2 class="devis-step__title">Infos personnelles</h2>
       <div class="devis-step__fields">
         <div class="form-group">
@@ -151,8 +162,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <p class="devis-step__warning">N'envoyez jamais de mots de passe !</p>
     </div>
 
-    <!-- Step 8 - Thank you -->
-    <div class="devis-step" data-step="8">
+    <!-- Step 9 - Thank you -->
+    <div class="devis-step" data-step="9">
       <div class="devis-merci">
         <h2 class="devis-merci__title">Merci beaucoup pour votre demande</h2>
         <p class="devis-merci__text">Nous sommes ravis de découvrir votre projet et de l'étudier avec attention afin de vous proposer une réponse la plus juste possible.</p>
@@ -172,7 +183,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     const hero = document.querySelector('.devis-hero');
     const progressBar = document.getElementById('progressBar');
     const submitBtn = document.getElementById('submitBtn');
-    const totalSteps = 7;
+    const totalSteps = 8;
 
     if (!startBtn || !form) return;
 
@@ -238,6 +249,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         // Text inputs
         const lien = (document.querySelector('input[name="lien"]') as HTMLInputElement)?.value;
         if (lien) data['Lien'] = lien;
+        const projet = (document.querySelector('textarea[name="projet"]') as HTMLTextAreaElement)?.value;
+        if (projet) data['Projet'] = projet;
 
         // Send via Formspree
         try {
@@ -248,7 +261,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           });
         } catch(e) { /* silent */ }
 
-        showStep(8);
+        showStep(9);
 
         // Redirect after 8 seconds
         setTimeout(() => {
@@ -454,6 +467,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .devis-step__input:focus {
     outline: none;
     border-color: var(--amber);
+  }
+  .devis-step__input--textarea {
+    resize: vertical;
+    min-height: 140px;
+    font-family: var(--font-body);
+    line-height: 1.6;
   }
 
   /* Fields */
