@@ -64,12 +64,20 @@ const navLinks = [
       toggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
     });
 
+    function closeMenu() {
+      links.classList.remove('open');
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Ouvrir le menu');
+    }
+
     links.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        links.classList.remove('open');
-        toggle.classList.remove('active');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Tap hors-liens (fond de l'overlay) → fermer
+    links.addEventListener('click', (e) => {
+      if (e.target === links) closeMenu();
     });
   })();
 </script>
@@ -148,6 +156,8 @@ const navLinks = [
     border: none;
     padding: 4px;
     width: 28px;
+    position: relative;
+    z-index: 10; /* au-dessus de l'overlay .nav__links pour rester cliquable (fermeture) */
   }
   .nav__toggle span {
     display: block; height: 1px;

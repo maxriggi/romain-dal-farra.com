@@ -334,6 +334,22 @@
   color: var(--gray);
 }
 
+/* ============================================================
+   MOBILE READABILITY
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Plancher les micro-labels mono + resserrer le tracking (le 0.3em casse la lecture < 11px) */
+  .hero__brand,
+  .hero__scroll-text { font-size: 0.72rem; letter-spacing: 0.15em; }
+  .section__label { letter-spacing: 0.18em; }
+  .about__portrait-text,
+  .film-card__type { letter-spacing: 0.1em; }
+
+  /* Éviter le zoom auto iOS au focus (tout champ < 16px le déclenche) */
+  .form-group__input,
+  .form-group__textarea { font-size: 16px; }
+}
+
 /* Button typography */
 .btn-shutter {
   font-family: var(--font-mono);

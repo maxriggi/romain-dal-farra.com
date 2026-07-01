@@ -157,6 +157,15 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* Mobile : reveals horizontaux → verticaux (le translateX 60px déborde sur écran étroit) */
+@media (max-width: 768px) {
+  .reveal-left, .reveal-right { transform: translateY(28px); }
+  .reveal-left.in-view, .reveal-right.in-view { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .stagger-children > * {
     opacity: 1;
     transform: none;

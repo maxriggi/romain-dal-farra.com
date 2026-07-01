@@ -141,5 +141,7 @@ const { showHeader = true } = Astro.props;
 
   @media (max-width: 768px) {
     .contact__grid { grid-template-columns: 1fr; gap: 3rem; }
+    /* Éviter le zoom auto iOS au focus */
+    .form-group__input, .form-group__textarea { font-size: 16px; }
   }
 </style>

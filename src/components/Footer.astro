@@ -3,6 +3,11 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
+  <p class="footer__tagline">
+    Réalisation vidéo, direction de la photographie et captation à <strong>Metz</strong>,
+    en <strong>Lorraine</strong> et dans le <strong>Grand Est</strong> — films d'entreprise,
+    clips, événementiel et courts métrages.
+  </p>
   <div class="footer__inner">
     <span class="footer__copy">&copy; {year} Romain Dal Farra. Tous droits réservés.</span>
   </div>
@@ -13,6 +18,18 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--gray-dark);
     padding: 2.5rem 0;
     text-align: center;
+  }
+  .footer__tagline {
+    max-width: 640px;
+    margin: 0 auto 1.75rem;
+    padding: 0 1.5rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--gray-light);
+  }
+  .footer__tagline strong {
+    color: var(--gray-lighter);
+    font-weight: 500;
   }
   .footer__inner {
     width: var(--container-width);

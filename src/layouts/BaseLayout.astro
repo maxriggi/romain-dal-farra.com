@@ -16,6 +16,9 @@ const {
   ogTitle = "Romain Dal Farra — Réalisateur & Directeur de la Photographie | Metz",
   ogDescription = "Réalisateur et directeur de la photographie freelance. Création audiovisuelle, post-production, technicien plateau.",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('videos/showreel-poster.jpg', Astro.site);
 ---
 
 <!DOCTYPE html>
@@ -27,33 +30,71 @@ const {
   <meta name="keywords" content="réalisateur Metz, directeur photographie Lorraine, chef opérateur freelance, cadreur, création audiovisuelle, post-production, technicien plateau, Romain Dal Farra">
   <meta name="author" content="Romain Dal Farra">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href={canonicalURL}>
+
+  <meta name="geo.region" content="FR-GES">
+  <meta name="geo.placename" content="Metz">
+  <meta name="geo.position" content="49.1193;6.1757">
+  <meta name="ICBM" content="49.1193, 6.1757">
 
   <meta property="og:title" content={ogTitle}>
   <meta property="og:description" content={ogDescription}>
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://romaindalfarra.com">
+  <meta property="og:url" content={canonicalURL}>
   <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Romain Dal Farra">
+  <meta property="og:image" content={ogImage}>
 
-  <script type="application/ld+json">
-  {
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={ogTitle}>
+  <meta name="twitter:description" content={ogDescription}>
+  <meta name="twitter:image" content={ogImage}>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Romain Dal Farra",
-    "jobTitle": "Réalisateur / Directeur de la Photographie",
-    "url": "https://romaindalfarra.com",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Metz",
-      "addressRegion": "Grand Est",
-      "addressCountry": "FR"
-    },
-    "knowsAbout": ["Réalisation", "Direction de la Photographie", "Post-Production", "Création audiovisuelle", "Technicien plateau"],
-    "sameAs": [
-      "https://www.instagram.com/romaindalfarra/",
-      "https://fr.linkedin.com/in/romain-dal-farra-b76231109"
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://romaindalfarra.com/#romain",
+        "name": "Romain Dal Farra",
+        "jobTitle": "Réalisateur / Directeur de la Photographie",
+        "url": "https://romaindalfarra.com",
+        "image": "https://romaindalfarra.com/videos/showreel-poster.jpg",
+        "knowsAbout": ["Réalisation vidéo", "Direction de la Photographie", "Post-Production", "Création audiovisuelle", "Technicien plateau"],
+        "sameAs": [
+          "https://www.instagram.com/romaindalfarra/",
+          "https://fr.linkedin.com/in/romain-dal-farra-b76231109"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://romaindalfarra.com/#business",
+        "name": "Romain Dal Farra — Réalisation vidéo",
+        "description": "Réalisation vidéo, direction de la photographie et captation à Metz, en Lorraine et dans le Grand Est.",
+        "url": "https://romaindalfarra.com",
+        "image": "https://romaindalfarra.com/videos/showreel-poster.jpg",
+        "founder": { "@id": "https://romaindalfarra.com/#romain" },
+        "priceRange": "€€",
+        "serviceType": ["Réalisation vidéo", "Direction de la photographie", "Captation vidéo", "Post-production", "Photographie"],
+        "areaServed": [
+          { "@type": "City", "name": "Metz" },
+          { "@type": "AdministrativeArea", "name": "Lorraine" },
+          { "@type": "AdministrativeArea", "name": "Grand Est" }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Metz",
+          "addressRegion": "Grand Est",
+          "addressCountry": "FR"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 49.1193, "longitude": 6.1757 },
+        "sameAs": [
+          "https://www.instagram.com/romaindalfarra/",
+          "https://fr.linkedin.com/in/romain-dal-farra-b76231109"
+        ]
+      }
     ]
-  }
-  </script>
+  })} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>{title}</title>
@@ -96,6 +137,7 @@ const {
       'use strict';
 
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
       // ---- APERTURE ----
       const apertureOverlay = document.getElementById('apertureOverlay');
@@ -181,7 +223,7 @@ const {
 
       // ---- FILM GRAIN ----
       function initFilmGrain() {
-        if (prefersReducedMotion) return;
+        if (prefersReducedMotion || isCoarsePointer) return; // canvas plein écran en rAF : trop coûteux sur mobile
         const canvas = document.getElementById('grainCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -226,7 +268,7 @@ const {
 
       // ---- PARTICLES ----
       function initParticles() {
-        if (prefersReducedMotion) return;
+        if (prefersReducedMotion || isCoarsePointer) return;
         const container = document.getElementById('particles');
         if (!container) return;
         for (let i = 0; i < 25; i++) {
